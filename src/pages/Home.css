@@ -284,13 +284,73 @@
 .home-footer {
   background: #2c2c2c;
   color: #E2D3AA;
-  padding: 32px 40px;
-  text-align: center;
+  padding: 40px 40px;
   font-size: 14px;
 }
 
-.home-footer p {
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-info {
+  text-align: center;
+}
+
+.footer-info p {
   margin: 0;
+  line-height: 1.6;
+}
+
+.social-media {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #E2D3AA;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.social-link:hover {
+  background: rgba(226, 211, 170, 0.1);
+  transform: translateY(-2px);
+}
+
+.social-link svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.social-link:hover svg {
+  transform: scale(1.1);
+}
+
+.social-link.facebook {
+  color: #E2D3AA;
+}
+
+.social-link.facebook:hover {
+  color: #1877F2;
+  background: rgba(24, 119, 242, 0.1);
+}
+
+.social-link.facebook:hover svg {
+  fill: #1877F2;
 }
 
 /* Responsive Design */
@@ -342,5 +402,27 @@
 
   .cta-button {
     width: 100%;
+  }
+
+  .home-footer {
+    padding: 32px 20px;
+  }
+
+  .footer-info p {
+    font-size: 12px;
+  }
+
+  .social-link {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .social-link span {
+    display: none;
+  }
+
+  .social-link svg {
+    width: 24px;
+    height: 24px;
   }
 }

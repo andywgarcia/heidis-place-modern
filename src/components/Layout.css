@@ -8,207 +8,157 @@
 
 .site-header {
   background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 20px 0;
+  padding: 0;
   transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .site-header.scrolled {
-  padding: 12px 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-bottom-color: rgba(0, 0, 0, 0.08);
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 40px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 24px;
-  position: relative;
+  justify-content: space-between;
+  gap: 40px;
+  min-height: 80px;
 }
 
 .logo-link {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   transition: transform 0.2s ease;
-}
-
-.logo-link:hover {
-  transform: scale(1.02);
-}
-
-.banner {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  max-height: 120px;
-}
-
-/* Mobile Menu Toggle */
-.mobile-menu-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
+  flex-shrink: 0;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1001;
-}
-
-.mobile-menu-toggle span {
-  width: 25px;
-  height: 3px;
-  background: #660000;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-.mobile-menu-toggle:hover span {
-  background: #8B0000;
-}
-
-#navbar {
-  width: 100%;
-  transition: all 0.3s ease;
-}
-
-#navbar ul {
-  list-style-type: none;
-  margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  font-family: inherit;
 }
 
-#navbar li {
-  margin: 0;
+.logo-link:hover {
+  transform: translateX(-2px);
 }
 
-.navbar {
-  margin: 0;
-  display: block;
-  border: 2px solid #660000;
-  padding: 10px 20px;
-  min-width: 140px;
-  text-align: center;
-  font-size: 15px;
-  text-decoration: none;
+.logo-text {
+  font-size: 28px;
+  font-weight: 700;
   color: #2c2c2c;
-  background-color: white;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: linear-gradient(135deg, #660000 0%, #8B0000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-tagline {
+  font-size: 12px;
   font-weight: 500;
-  position: relative;
-  overflow: hidden;
+  color: #666;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.navbar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
+.header-cta {
+  padding: 12px 28px;
   background: linear-gradient(135deg, #660000 0%, #8B0000 100%);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.navbar:hover::before,
-.navbar:active::before {
-  left: 0;
-}
-
-.navbar:hover,
-.navbar:active {
   color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 0, 0, 0.2);
+  display: inline-block;
+  letter-spacing: 0.3px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.header-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(102, 0, 0, 0.2);
-  border-color: #660000;
+  box-shadow: 0 4px 12px rgba(102, 0, 0, 0.3);
+  background: linear-gradient(135deg, #8B0000 0%, #660000 100%);
 }
 
-.navbar:visited {
-  color: #2c2c2c;
-}
-
-.navbar:hover:visited {
-  color: white;
-}
-
-/* Active link styling for smooth scroll */
-.navbar.active {
-  background: linear-gradient(135deg, #660000 0%, #8B0000 100%);
-  color: white;
-  border-color: #660000;
+.header-cta:active {
+  transform: translateY(0);
 }
 
 /* Responsive */
+@media (max-width: 968px) {
+  .header-content {
+    padding: 0 24px;
+    min-height: 70px;
+  }
+
+  .logo-text {
+    font-size: 24px;
+  }
+
+  .logo-tagline {
+    font-size: 11px;
+  }
+
+  .header-cta {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 768px) {
   .header-content {
     padding: 0 20px;
-    flex-direction: row;
-    justify-content: space-between;
+    min-height: 70px;
   }
 
-  .mobile-menu-toggle {
-    display: flex;
+  .logo-text {
+    font-size: 22px;
   }
 
-  #navbar {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: all 0.3s ease;
+  .logo-tagline {
+    font-size: 10px;
   }
 
-  #navbar.mobile-open {
-    max-height: 500px;
-    opacity: 1;
-    padding: 20px;
-  }
-
-  #navbar ul {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .navbar {
-    width: 100%;
-    min-width: auto;
-  }
-
-  .banner {
-    max-height: 80px;
+  .header-cta {
+    padding: 10px 20px;
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
-  #navbar ul {
-    gap: 8px;
+  .header-content {
+    padding: 0 16px;
+    min-height: 60px;
   }
 
-  .navbar {
+  .logo-text {
+    font-size: 20px;
+  }
+
+  .logo-tagline {
+    font-size: 9px;
+  }
+
+  .header-cta {
     padding: 8px 16px;
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 
