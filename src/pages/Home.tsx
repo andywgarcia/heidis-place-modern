@@ -320,7 +320,7 @@ export default function Home() {
           </div>
           <div className="about-image">
             <img
-              src="https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(30%20of%2049)%20copy.gif"
+              src="/heidi-studio.png"
               alt="Heidi in her framing studio surrounded by custom frames and materials"
             />
           </div>
