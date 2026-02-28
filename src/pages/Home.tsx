@@ -342,6 +342,7 @@ export default function Home() {
                 src="/heidi-in-client.jpg"
                 alt="Heidi delivering and installing custom framed art at a client location"
                 loading="lazy"
+                style={{ objectPosition: 'center 35%' }}
               />
             </div>
           </div>
