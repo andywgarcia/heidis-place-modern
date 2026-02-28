@@ -370,6 +370,8 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .testimonial-card:hover {
@@ -397,6 +399,8 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  margin-top: auto;
+  padding-top: 20px;
 }
 
 .testimonial-author strong {
@@ -409,6 +413,17 @@
   font-size: 13px;
   color: #999;
   font-family: 'DM Sans', sans-serif;
+}
+
+.review-link {
+  color: #999;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.review-link:hover {
+  color: #4a0e0e;
+  text-decoration: underline;
 }
 
 /* About Section */
@@ -711,5 +726,99 @@ a.contact-item:hover {
   .social-link svg {
     width: 22px;
     height: 22px;
+  }
+}
+
+/* ===================== */
+/* Scroll Animations     */
+/* ===================== */
+.animated-section {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.animated-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================== */
+/* Per-Section CTAs      */
+/* ===================== */
+.section-cta {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.section-cta.inline {
+  text-align: left;
+  margin-top: 28px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.section-cta p {
+  font-size: 16px;
+  color: #777;
+  margin: 0 0 12px 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.cta-button-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4a0e0e;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 10px 0;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.cta-button-inline:hover {
+  border-bottom-color: #4a0e0e;
+  transform: translateX(4px);
+}
+
+/* ===================== */
+/* About Section - Right */
+/* ===================== */
+.about-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-map {
+  text-align: center;
+}
+
+.about-map iframe {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.map-caption {
+  font-size: 13px;
+  color: #999;
+  margin: 10px 0 0 0;
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+}
+
+/* Responsive adjustments for new elements */
+@media (max-width: 768px) {
+  .section-cta {
+    margin-top: 32px;
+    padding-top: 24px;
+  }
+
+  .about-right {
+    order: -1;
   }
 }
