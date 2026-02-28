@@ -1,145 +1,37 @@
-/* CSS Document for Heidi's Place */
-
-#page {
-  width: 900px;
-  height: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-}
-
-#page1 {
-  width: 900px;
-  height: 1050px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-}
+/* Shared styles */
 
 body {
-  text-align: center;
-  background-color: #f5f5f5;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: #faf9f7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-#navbar {
-  display: block;
-  margin: 0 auto;
-  width: 900px;
-}
-
-#navbar ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-#navbar li {
-  margin: 0;
-}
-
-.navbar {
-  margin: 10px;
-  display: block;
-  border: 2px solid #660000;
-  padding: 5px;
-  width: 150px;
+/* CTA Section (used on sub-pages) */
+.cta-section {
+  padding: 80px 40px;
   text-align: center;
-  font-size: 16px;
-  text-decoration: none;
-  color: black;
-  background-color: #E2D3AA;
-  position: relative;
+  background: linear-gradient(180deg, rgba(74, 14, 14, 0.03) 0%, rgba(74, 14, 14, 0.06) 100%);
 }
 
-.navbar:visited {
-  display: block;
-  font-weight: bold;
-  color: black;
-  background-color: #E2D3AA;
-  width: 150px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-.navbar:hover,
-.navbar:active {
-  background-color: #FFFEDA;
-}
-
-.banner {
-  margin-left: 5px;
-}
-
-#text {
-  text-align: left;
-  position: relative;
-  left: 192px;
-  top: -215px;
-  bottom: 0px;
-  width: 690px;
-  border: 2px solid #660000;
-  padding: 25px;
-  padding-top: 0px;
-  background-color: #E2D3AA;
-  font-size: 16px;
-  font-family: Georgia, "Times New Roman", Times, serif;
-}
-
-#pictures {
-  position: relative;
-  left: 0px;
-  top: -200px;
-}
-
-#studio {
-  position: relative;
-  top: -200px;
-  padding-left: 10px;
-  margin: 0px;
-}
-
-#foot {
-  text-align: center;
-  position: relative;
-  border: 2px solid #660000;
-  background-color: #E2D3AA;
-  font-family: Georgia, "Times New Roman", Times, serif;
-  padding-left: 20px;
-  padding-top: -15px;
-  padding-bottom: -15px;
-  margin: 10px;
-  width: 902px;
-}
-
-#intro {
-  font-size: 18px;
-  font-style: italic;
-  font-weight: bold;
-}
-
-
-/* Image gallery styles */
-.image-gallery {
-  width: 900px;
-  border: 0;
-  border-spacing: 5px;
-  border-collapse: separate;
+.cta-content {
+  max-width: 600px;
   margin: 0 auto;
 }
 
-.image-gallery td {
-  padding: 7.5px;
+.cta-content h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
-.image-gallery img {
-  max-width: 100%;
-  height: auto;
+.cta-content p {
+  font-size: 17px;
+  color: #666;
+  margin: 0 0 32px 0;
+  font-family: 'DM Sans', sans-serif;
 }
