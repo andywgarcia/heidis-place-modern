@@ -1,8 +1,40 @@
+import { useState } from 'react';
 import './Home.css';
 import AnimatedSection from '../components/AnimatedSection';
+import Lightbox from '../components/Lightbox';
+
+const galleryImages = [
+  // Distinctive Framing
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/P1010084.JPG', alt: 'Beautifully framed art pieces displayed on a wall' },
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/P1010091.JPG', alt: 'Custom framed pictures with decorative accents' },
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/P1010090.JPG', alt: 'Elegant frame selection showcasing design expertise' },
+  { src: '/bourbon-bull.jpg', alt: 'Heidi with a vibrant large-scale Bourbon Street painting in custom frame' },
+  { src: '/gallery.jpg', alt: 'Framed landscape photograph elegantly displayed on a white wall' },
+  // Needlework
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/DSC_0020.JPG', alt: 'Expertly framed needlework piece' },
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_046.jpg', alt: 'Needlework being carefully stretched' },
+  { src: '/needlework.jpg', alt: 'Finished needlework in elegant frame' },
+  { src: '/kimono.jpg', alt: 'Intricate kimono needlework in gold frame with sage mat' },
+  // A Unique Touch
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_033.jpg', alt: 'Custom framing with unique personal touches' },
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/April%202007%20149.jpg', alt: 'Custom uniform and memorabilia framing' },
+  { src: 'https://www.heidisplaceframes.com/Framing%20and%20other/June%202006%20027.jpg', alt: 'Creative multi-opening custom frame design' },
+  { src: '/gallery-nature.jpg', alt: 'Multi-panel ocean photography gallery wall installation' },
+  // Quality
+  { src: 'https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(38%20of%2049).jpg', alt: 'Heidi carefully crafting a custom frame' },
+  { src: 'https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(45%20of%2049).jpg', alt: 'Precision framing tools and craftsmanship' },
+  { src: 'https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(47%20of%2049).jpg', alt: 'High-quality frame corner detail' },
+  { src: '/heidi-in-client.jpg', alt: 'Heidi delivering and installing custom framed art at a client location' },
+];
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const openLightbox = (src: string) => {
+    const idx = galleryImages.findIndex(img => img.src === src);
+    setLightboxIndex(idx >= 0 ? idx : 0);
+  };
 
   return (
     <div className="home-container">
@@ -94,21 +126,21 @@ export default function Home() {
         </AnimatedSection>
         <AnimatedSection delay={150}>
           <div className="image-gallery-grid">
-            <div className="gallery-item">
+            <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/P1010084.JPG')}>
               <img
                 src="https://www.heidisplaceframes.com/Framing%20and%20other/P1010084.JPG"
                 alt="Beautifully framed art pieces displayed on a wall"
                 loading="lazy"
               />
             </div>
-            <div className="gallery-item">
+            <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/P1010091.JPG')}>
               <img
                 src="https://www.heidisplaceframes.com/Framing%20and%20other/P1010091.JPG"
                 alt="Custom framed pictures with decorative accents"
                 loading="lazy"
               />
             </div>
-            <div className="gallery-item">
+            <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/P1010090.JPG')}>
               <img
                 src="https://www.heidisplaceframes.com/Framing%20and%20other/P1010090.JPG"
                 alt="Elegant frame selection showcasing design expertise"
@@ -120,6 +152,22 @@ export default function Home() {
             <p>Love what you see? Let us frame your favorite piece.</p>
             <a href="tel:4254892569" className="cta-button-inline">Schedule a Free Consultation →</a>
           </div>
+          <div className="image-gallery-grid">
+            <div className="gallery-item clickable" onClick={() => openLightbox('/bourbon-bull.jpg')}>
+              <img
+                src="/bourbon-bull.jpg"
+                alt="Heidi with a vibrant large-scale Bourbon Street painting in custom frame"
+                loading="lazy"
+              />
+            </div>
+            <div className="gallery-item clickable" onClick={() => openLightbox('/gallery.jpg')}>
+              <img
+                src="/gallery.jpg"
+                alt="Framed landscape photograph elegantly displayed on a white wall"
+                loading="lazy"
+              />
+            </div>
+          </div>
         </AnimatedSection>
       </section>
 
@@ -128,7 +176,7 @@ export default function Home() {
         <AnimatedSection>
           <div className="split-section reverse">
             <div className="split-images">
-              <div className="gallery-item large">
+              <div className="gallery-item large clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/DSC_0020.JPG')}>
                 <img
                   src="https://www.heidisplaceframes.com/Framing%20and%20other/DSC_0020.JPG"
                   alt="Expertly framed needlework piece"
@@ -136,17 +184,24 @@ export default function Home() {
                 />
               </div>
               <div className="split-images-row">
-                <div className="gallery-item">
+                <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_046.jpg')}>
                   <img
                     src="https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_046.jpg"
                     alt="Needlework being carefully stretched"
                     loading="lazy"
                   />
                 </div>
-                <div className="gallery-item">
+                <div className="gallery-item clickable" onClick={() => openLightbox('/needlework.jpg')}>
                   <img
                     src="/needlework.jpg"
                     alt="Finished needlework in elegant frame"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="gallery-item clickable" onClick={() => openLightbox('/kimono.jpg')}>
+                  <img
+                    src="/kimono.jpg"
+                    alt="Intricate kimono needlework in gold frame with sage mat"
                     loading="lazy"
                   />
                 </div>
@@ -189,21 +244,21 @@ export default function Home() {
         </AnimatedSection>
         <AnimatedSection delay={150}>
           <div className="image-gallery-grid wide">
-            <div className="gallery-item featured">
+            <div className="gallery-item featured clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_033.jpg')}>
               <img
                 src="https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_033.jpg"
                 alt="Custom framing with unique personal touches"
                 loading="lazy"
               />
             </div>
-            <div className="gallery-item">
+            <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/April%202007%20149.jpg')}>
               <img
                 src="https://www.heidisplaceframes.com/Framing%20and%20other/April%202007%20149.jpg"
                 alt="Custom uniform and memorabilia framing"
                 loading="lazy"
               />
             </div>
-            <div className="gallery-item">
+            <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/Framing%20and%20other/June%202006%20027.jpg')}>
               <img
                 src="https://www.heidisplaceframes.com/Framing%20and%20other/June%202006%20027.jpg"
                 alt="Creative multi-opening custom frame design"
@@ -214,6 +269,15 @@ export default function Home() {
           <div className="section-cta">
             <p>Have something special to frame? We love a creative challenge.</p>
             <a href="tel:4254892569" className="cta-button-inline">Let's Talk About Your Project →</a>
+          </div>
+          <div className="image-gallery-grid wide">
+            <div className="gallery-item featured clickable" onClick={() => openLightbox('/gallery-nature.jpg')}>
+              <img
+                src="/gallery-nature.jpg"
+                alt="Multi-panel ocean photography gallery wall installation"
+                loading="lazy"
+              />
+            </div>
           </div>
         </AnimatedSection>
       </section>
@@ -249,7 +313,7 @@ export default function Home() {
               </div>
             </div>
             <div className="split-images">
-              <div className="gallery-item large">
+              <div className="gallery-item large clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(38%20of%2049).jpg')}>
                 <img
                   src="https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(38%20of%2049).jpg"
                   alt="Heidi carefully crafting a custom frame"
@@ -257,14 +321,14 @@ export default function Home() {
                 />
               </div>
               <div className="split-images-row">
-                <div className="gallery-item">
+                <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(45%20of%2049).jpg')}>
                   <img
                     src="https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(45%20of%2049).jpg"
                     alt="Precision framing tools and craftsmanship"
                     loading="lazy"
                   />
                 </div>
-                <div className="gallery-item">
+                <div className="gallery-item clickable" onClick={() => openLightbox('https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(47%20of%2049).jpg')}>
                   <img
                     src="https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(47%20of%2049).jpg"
                     alt="High-quality frame corner detail"
@@ -272,6 +336,13 @@ export default function Home() {
                   />
                 </div>
               </div>
+            </div>
+            <div className="gallery-item clickable" onClick={() => openLightbox('/heidi-in-client.jpg')} style={{ marginTop: '16px' }}>
+              <img
+                src="/heidi-in-client.jpg"
+                alt="Heidi delivering and installing custom framed art at a client location"
+                loading="lazy"
+              />
             </div>
           </div>
         </AnimatedSection>
@@ -408,6 +479,14 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={galleryImages}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
   );
 }
