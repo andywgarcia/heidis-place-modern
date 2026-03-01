@@ -18,7 +18,7 @@ export default function NeedleworkSpecialist() {
           <div className="split-images">
             <div className="gallery-item large">
               <img
-                src="https://www.heidisplaceframes.com/Framing%20and%20other/DSC_0020.JPG"
+                src="/images/DSC_0020.jpg"
                 alt="Expertly framed needlework piece"
                 loading="lazy"
               />
@@ -26,14 +26,14 @@ export default function NeedleworkSpecialist() {
             <div className="split-images-row">
               <div className="gallery-item">
                 <img
-                  src="https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_046.jpg"
+                  src="/images/May_2011_046.jpg"
                   alt="Needlework being carefully stretched and prepared"
                   loading="lazy"
                 />
               </div>
               <div className="gallery-item">
                 <img
-                  src="/needlework.jpg"
+                  src="/images/needlework.jpg"
                   alt="Finished needlework with professional framing"
                   loading="lazy"
                 />

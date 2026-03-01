@@ -15,7 +15,7 @@
   max-width: 100%;
   text-align: center;
   background:
-    url('/hero.jpg') center top / cover no-repeat;
+    url('/images/hero.jpg') center top / cover no-repeat;
   overflow: hidden;
 }
 

@@ -46,7 +46,7 @@ export default function DistinctiveFraming() {
           <div className="split-images">
             <div className="gallery-item large">
               <img
-                src="https://www.heidisplaceframes.com/Framing%20and%20other/P1010084.JPG"
+                src="/images/P1010084.jpg"
                 alt="Beautifully framed art pieces displayed on a wall"
                 loading="lazy"
               />
@@ -54,14 +54,14 @@ export default function DistinctiveFraming() {
             <div className="split-images-row">
               <div className="gallery-item">
                 <img
-                  src="https://www.heidisplaceframes.com/Framing%20and%20other/P1010091.JPG"
+                  src="/images/P1010091.jpg"
                   alt="Custom framed pictures with decorative accents"
                   loading="lazy"
                 />
               </div>
               <div className="gallery-item">
                 <img
-                  src="https://www.heidisplaceframes.com/Framing%20and%20other/P1010090.JPG"
+                  src="/images/P1010090.jpg"
                   alt="Elegant frame selection showcasing design expertise"
                   loading="lazy"
                 />

@@ -17,21 +17,21 @@ export default function AUniqueTouch() {
         <div className="image-gallery-grid wide">
           <div className="gallery-item featured">
             <img
-              src="https://www.heidisplaceframes.com/Framing%20and%20other/May_2011_033.jpg"
+              src="/images/May_2011_033.jpg"
               alt="Custom framing with unique personal touches"
               loading="lazy"
             />
           </div>
           <div className="gallery-item">
             <img
-              src="https://www.heidisplaceframes.com/Framing%20and%20other/April%202007%20149.jpg"
+              src="/images/April_2007_149.jpg"
               alt="Custom uniform and memorabilia framing"
               loading="lazy"
             />
           </div>
           <div className="gallery-item">
             <img
-              src="https://www.heidisplaceframes.com/Framing%20and%20other/June%202006%20027.jpg"
+              src="/images/June_2006_027.jpg"
               alt="Creative multi-opening custom frame design"
               loading="lazy"
             />

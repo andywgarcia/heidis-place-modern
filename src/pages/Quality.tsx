@@ -44,7 +44,7 @@ export default function Quality() {
           <div className="split-images">
             <div className="gallery-item large">
               <img
-                src="https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(38%20of%2049).jpg"
+                src="/images/Heidi_38.jpg"
                 alt="Heidi carefully crafting a custom frame"
                 loading="lazy"
               />
@@ -52,14 +52,14 @@ export default function Quality() {
             <div className="split-images-row">
               <div className="gallery-item">
                 <img
-                  src="https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(45%20of%2049).jpg"
+                  src="/images/Heidi_45.jpg"
                   alt="Precision framing tools and craftsmanship"
                   loading="lazy"
                 />
               </div>
               <div className="gallery-item">
                 <img
-                  src="https://www.heidisplaceframes.com/images/Heidi%202_24_11%20(47%20of%2049).jpg"
+                  src="/images/Heidi_47.jpg"
                   alt="High-quality frame corner detail"
                   loading="lazy"
                 />
