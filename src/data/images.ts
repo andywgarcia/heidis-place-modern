@@ -4,8 +4,8 @@ export interface SiteImage {
   width: number;
 }
 
-const maxGeneratedWidth = 2000;
-const responsiveWidths = [480, 800, 1200, 1600, maxGeneratedWidth];
+const maxGeneratedWidth = 1600;
+const responsiveWidths = [480, 800, 1200, maxGeneratedWidth];
 
 export const generatedWidthsFor = (image: SiteImage) => {
   const sourceWidth = Math.min(image.width, maxGeneratedWidth);
