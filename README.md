@@ -1,6 +1,6 @@
 # Heidi's Place Custom Picture Framing
 
-Website for Heidi's Place Custom Picture Framing in Bothell, WA — a modern redesign built with React, TypeScript, and Vite.
+Website for Heidi's Place Custom Picture Framing in Buckley, WA — a modern redesign built with React, TypeScript, and Vite.
 
 ## Tech Stack
 
@@ -56,7 +56,7 @@ heidis-place-modern/
 - Fully responsive design (mobile → ultra-wide)
 - Scroll-triggered fade-in animations
 - Click-to-fullscreen image lightbox (17 images, keyboard navigable)
-- Google Maps embed with Bothell, WA pin
+- Google Maps embed with Buckley, WA pin
 - Real customer testimonials from Google Reviews
 - Per-section calls to action
 - Facebook + phone contact links

@@ -42,7 +42,7 @@ export default function Home() {
       <section className="hero-section" id="home">
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <div className="hero-badge">BOTHELL, WA · SINCE 2001</div>
+          <div className="hero-badge">BUCKLEY, WA · SINCE 2001</div>
           <h1 className="hero-headline">
             The framing you need to{' '}
             <span className="highlight">elevate your art</span>
@@ -53,9 +53,9 @@ export default function Home() {
             we bring unsurpassed quality and design to transform your pictures into works of art.
           </p>
           <div className="hero-cta">
-            <a href="tel:4254892569" className="cta-button primary">
+            <a href="tel:2064911368" className="cta-button primary">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-              Call (425) 489-2569
+              Call (206) 491-1368
             </a>
             <a href="mailto:Heidis.frames@gmail.com" className="cta-button secondary">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
@@ -150,7 +150,7 @@ export default function Home() {
           </div>
           <div className="section-cta">
             <p>Love what you see? Let us frame your favorite piece.</p>
-            <a href="tel:4254892569" className="cta-button-inline">Schedule a Free Consultation →</a>
+            <a href="tel:2064911368" className="cta-button-inline">Schedule a Free Consultation →</a>
           </div>
           <div className="image-gallery-grid">
             <div className="gallery-item clickable" onClick={() => openLightbox('/images/bourbon-bull.jpg')}>
@@ -268,7 +268,7 @@ export default function Home() {
           </div>
           <div className="section-cta">
             <p>Have something special to frame? We love a creative challenge.</p>
-            <a href="tel:4254892569" className="cta-button-inline">Let's Talk About Your Project →</a>
+            <a href="tel:2064911368" className="cta-button-inline">Let's Talk About Your Project →</a>
           </div>
           <div className="image-gallery-grid wide">
             <div className="gallery-item featured clickable" onClick={() => openLightbox('/images/gallery-nature.jpg')}>
@@ -364,7 +364,7 @@ export default function Home() {
               <p>"Heidi has been framing my counted cross-stitch pieces for over 25 years. No matter which state I live in, I always mail Heidi my work. The quality of artistry is amazing! It is evident she takes a lot of pride in each frame she creates. I will never trust anyone else to frame my work."</p>
               <div className="testimonial-author">
                 <strong>Cabin L.</strong>
-                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.8265546,-122.199975,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
+                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.1426321,-122.0641498,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
               </div>
             </div>
             <div className="testimonial-card">
@@ -372,7 +372,7 @@ export default function Home() {
               <p>"Heidi provides absolutely gorgeous and professional framing. She is kind, patient, and works with your vision and your budget to find the right materials for your project. The result was stunning and I will return!"</p>
               <div className="testimonial-author">
                 <strong>Anjanette V.</strong>
-                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.8265546,-122.199975,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
+                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.1426321,-122.0641498,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
               </div>
             </div>
             <div className="testimonial-card">
@@ -380,7 +380,7 @@ export default function Home() {
               <p>"Heidi invests her time and expertise in your artwork. It felt like she had all the time in the world to help make choices that would create a showpiece. We are thrilled! Completed before scheduled and price competitive!"</p>
               <div className="testimonial-author">
                 <strong>Clark H.</strong>
-                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.8265546,-122.199975,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
+                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.1426321,-122.0641498,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
               </div>
             </div>
           </div>
@@ -401,11 +401,11 @@ export default function Home() {
                 we make personal house or business calls, bringing our samples to you.
               </p>
               <div className="contact-info">
-                <a href="tel:4254892569" className="contact-item">
+                <a href="tel:2064911368" className="contact-item">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
                   <div>
                     <strong>Phone</strong>
-                    <span>(425) 489-2569</span>
+                    <span>(206) 491-1368</span>
                   </div>
                 </a>
                 <a href="mailto:Heidis.frames@gmail.com" className="contact-item">
@@ -419,7 +419,7 @@ export default function Home() {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                   <div>
                     <strong>Location</strong>
-                    <span>Bothell, WA 98012</span>
+                    <span>12729 Pioneer Way E, Buckley, WA 98321</span>
                   </div>
                 </div>
               </div>
@@ -433,16 +433,16 @@ export default function Home() {
               </div>
               <div className="about-map">
                 <iframe
-                  src="https://maps.google.com/maps?q=Heidi%27s+Place+Custom+Picture+Framing+Bothell+WA&output=embed&z=11"
+                  src="https://maps.google.com/maps?q=Heidi%27s+Place+Custom+Framing+12729+Pioneer+Way+E+Buckley+WA+98321&output=embed&z=14"
                   width="100%"
                   height="200"
                   style={{ border: 0, borderRadius: '16px' }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Heidi's Place location - Bothell, WA"
+                  title="Heidi's Place location - Buckley, WA"
                 ></iframe>
-                <p className="map-caption">Serving the Greater Seattle Area</p>
+                <p className="map-caption">Serving Buckley and the Greater Puget Sound area</p>
               </div>
             </div>
           </div>
@@ -458,7 +458,7 @@ export default function Home() {
           </div>
           <div className="footer-info">
             <p>
-              Heidis.frames@gmail.com &bull; (425) 489-2569 &bull; Bothell, WA 98012
+              Heidis.frames@gmail.com &bull; (206) 491-1368 &bull; 12729 Pioneer Way E, Buckley, WA 98321
             </p>
           </div>
           <div className="footer-bottom">
