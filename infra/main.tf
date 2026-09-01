@@ -128,6 +128,10 @@ resource "aws_cloudfront_origin_access_control" "spa" {
   signing_protocol                  = "sigv4"
 }
 
+data "aws_cloudfront_response_headers_policy" "security_headers" {
+  name = "Managed-SecurityHeadersPolicy"
+}
+
 resource "aws_cloudfront_distribution" "spa" {
   enabled             = true
   is_ipv6_enabled     = true
@@ -158,6 +162,8 @@ resource "aws_cloudfront_distribution" "spa" {
     min_ttl     = 0
     default_ttl = 86400
     max_ttl     = 31536000
+
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.security_headers.id
   }
 
   # SPA routing: return index.html for 403/404 so react-router handles it
@@ -267,9 +273,9 @@ resource "aws_iam_role_policy" "github_actions" {
         ]
       },
       {
-        Sid    = "CloudFrontInvalidate"
-        Effect = "Allow"
-        Action = "cloudfront:CreateInvalidation"
+        Sid      = "CloudFrontInvalidate"
+        Effect   = "Allow"
+        Action   = "cloudfront:CreateInvalidation"
         Resource = aws_cloudfront_distribution.spa.arn
       }
     ]

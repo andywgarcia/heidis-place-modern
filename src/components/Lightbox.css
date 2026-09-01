@@ -136,6 +136,16 @@
     cursor: zoom-in;
 }
 
+.lightbox-content:focus {
+    outline: none;
+}
+
+.lightbox-close:focus-visible,
+.lightbox-nav:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 3px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .lightbox-image {
@@ -167,5 +177,26 @@
     .lightbox-nav svg {
         width: 22px;
         height: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lightbox-overlay {
+        animation: none;
+    }
+
+    .lightbox-image,
+    .lightbox-close,
+    .lightbox-nav {
+        transition: none;
+    }
+
+    .lightbox-close:hover {
+        transform: none;
+    }
+
+    .lightbox-nav,
+    .lightbox-nav:hover {
+        transform: translateY(-50%);
     }
 }

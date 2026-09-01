@@ -31,12 +31,14 @@ export default function Layout() {
       const headerOffset = 100;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: offsetPosition, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
     }
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
   const isHomePage = location.pathname === '/';
@@ -57,7 +59,7 @@ export default function Layout() {
             </Link>
           )}
 
-          <nav className={`nav-menu ${menuOpen ? 'open' : ''}`}>
+          <nav id="primary-navigation" className={`nav-menu ${menuOpen ? 'open' : ''}`}>
             <a href="#distinctive-framing" onClick={(e) => scrollToSection(e, 'distinctive-framing')}>Framing</a>
             <a href="#needlework-specialist" onClick={(e) => scrollToSection(e, 'needlework-specialist')}>Needlework</a>
             <a href="#a-unique-touch" onClick={(e) => scrollToSection(e, 'a-unique-touch')}>Unique Touch</a>
@@ -77,7 +79,13 @@ export default function Layout() {
               </Link>
             )}
 
-            <button className={`menu-toggle ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+            <button
+              className={`menu-toggle ${menuOpen ? 'open' : ''}`}
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+              aria-controls="primary-navigation"
+              aria-expanded={menuOpen}
+            >
               <span></span>
               <span></span>
               <span></span>

@@ -1,5 +1,4 @@
 /* Modern Home Page Styles */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 .home-container {
   min-height: 100vh;
@@ -14,9 +13,21 @@
   padding: 160px 40px 140px;
   max-width: 100%;
   text-align: center;
-  background:
-    url('/images/hero.jpg') center top / cover no-repeat;
   overflow: hidden;
+}
+
+.hero-media,
+.hero-media picture,
+.hero-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-media img {
+  object-fit: cover;
+  object-position: center top;
 }
 
 .hero-overlay {
@@ -266,6 +277,14 @@
   aspect-ratio: 4/3;
 }
 
+button.gallery-item {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  text-align: inherit;
+  font: inherit;
+}
+
 .gallery-item.large {
   aspect-ratio: 16/10;
 }
@@ -275,12 +294,18 @@
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
 }
 
-.gallery-item img {
+.gallery-item picture,
+.about-image picture,
+.gallery-item img,
+.about-image img {
   width: 100%;
   height: 100%;
+  display: block;
+}
+
+.gallery-item img {
   object-fit: cover;
   object-position: top;
-  display: block;
   transition: transform 0.5s ease;
 }
 
@@ -505,6 +530,81 @@ a.contact-item:hover {
   font-size: 15px;
 }
 
+.request-form {
+  margin-top: 28px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.request-form h3 {
+  margin: 0 0 18px 0;
+  color: #1a1a1a;
+  font-size: 20px;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  color: #4a0e0e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(74, 14, 14, 0.18);
+  border-radius: 10px;
+  color: #1a1a1a;
+  font: inherit;
+  padding: 12px 14px;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #4a0e0e;
+  box-shadow: 0 0 0 3px rgba(74, 14, 14, 0.1);
+}
+
+.request-submit {
+  width: 100%;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4a0e0e 0%, #7a1a1a 100%);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(74, 14, 14, 0.22);
+}
+
+.request-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(74, 14, 14, 0.3);
+}
+
 .about-image {
   border-radius: 20px;
   overflow: hidden;
@@ -514,10 +614,7 @@ a.contact-item:hover {
 }
 
 .about-image img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
-  display: block;
   position: absolute;
   inset: 0;
 }
@@ -681,9 +778,13 @@ a.contact-item:hover {
   .hero-section,
   .features-section,
   .gallery-section,
-  .about-section,
   .testimonials-section {
     padding: 70px 20px;
+  }
+
+  .about-section {
+    padding: 70px 20px;
+    border-radius: 0;
   }
 
   .section-header h2,
@@ -728,6 +829,10 @@ a.contact-item:hover {
     width: 22px;
     height: 22px;
   }
+
+  .request-form {
+    padding: 20px;
+  }
 }
 
 /* ===================== */
@@ -742,6 +847,38 @@ a.contact-item:hover {
 .animated-section.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-section,
+  .gallery-item,
+  .gallery-item img,
+  .feature-card,
+  .testimonial-card,
+  .cta-button,
+  .cta-button-inline,
+  .request-submit {
+    transition: none;
+  }
+
+  .animated-section {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gallery-item:hover,
+  .feature-card:hover,
+  .testimonial-card:hover,
+  .cta-button.primary:hover,
+  .cta-button.secondary:hover,
+  .cta-button-inline:hover,
+  .request-submit:hover {
+    transform: none;
+  }
+
+  .gallery-item:hover img {
+    transform: none;
+  }
 }
 
 /* ===================== */

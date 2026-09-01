@@ -1,31 +1,10 @@
 import { useState } from 'react';
+import type { CSSProperties, FormEvent } from 'react';
 import './Home.css';
 import AnimatedSection from '../components/AnimatedSection';
 import Lightbox from '../components/Lightbox';
-
-const galleryImages = [
-  // Distinctive Framing
-  { src: '/images/P1010084.jpg', alt: 'Beautifully framed art pieces displayed on a wall' },
-  { src: '/images/P1010091.jpg', alt: 'Custom framed pictures with decorative accents' },
-  { src: '/images/P1010090.jpg', alt: 'Elegant frame selection showcasing design expertise' },
-  { src: '/images/bourbon-bull.jpg', alt: 'Heidi with a vibrant large-scale Bourbon Street painting in custom frame' },
-  { src: '/images/gallery.jpg', alt: 'Framed landscape photograph elegantly displayed on a white wall' },
-  // Needlework
-  { src: '/images/DSC_0020.jpg', alt: 'Expertly framed needlework piece' },
-  { src: '/images/May_2011_046.jpg', alt: 'Needlework being carefully stretched' },
-  { src: '/images/needlework.jpg', alt: 'Finished needlework in elegant frame' },
-  { src: '/images/kimono.jpg', alt: 'Intricate kimono needlework in gold frame with sage mat' },
-  // A Unique Touch
-  { src: '/images/May_2011_033.jpg', alt: 'Custom framing with unique personal touches' },
-  { src: '/images/April_2007_149.jpg', alt: 'Custom uniform and memorabilia framing' },
-  { src: '/images/June_2006_027.jpg', alt: 'Creative multi-opening custom frame design' },
-  { src: '/images/gallery-nature.jpg', alt: 'Multi-panel ocean photography gallery wall installation' },
-  // Quality
-  { src: '/images/Heidi_38.jpg', alt: 'Heidi carefully crafting a custom frame' },
-  { src: '/images/Heidi_45.jpg', alt: 'Precision framing tools and craftsmanship' },
-  { src: '/images/Heidi_47.jpg', alt: 'High-quality frame corner detail' },
-  { src: '/images/heidi-in-client.jpg', alt: 'Heidi delivering and installing custom framed art at a client location' },
-];
+import ResponsiveImage from '../components/ResponsiveImage';
+import { galleryImages, generatedWidthsFor, heroImage, studioImage, type SiteImage } from '../data/images';
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -36,10 +15,56 @@ export default function Home() {
     setLightboxIndex(idx >= 0 ? idx : 0);
   };
 
+  const handleRequestSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const form = new FormData(event.currentTarget);
+    const body = [
+      `Name: ${form.get('name') ?? ''}`,
+      `Contact: ${form.get('contact') ?? ''}`,
+      `Project: ${form.get('project') ?? ''}`,
+    ].join('\n');
+
+    window.location.href = `mailto:Heidis.frames@gmail.com?subject=${encodeURIComponent("Custom framing appointment request")}&body=${encodeURIComponent(body)}`;
+  };
+
+  const renderGalleryItem = (
+    image: SiteImage,
+    options: { className?: string; sizes?: string; style?: CSSProperties; imageStyle?: CSSProperties } = {},
+  ) => (
+    <button
+      type="button"
+      className={`gallery-item clickable ${options.className ?? ''}`.trim()}
+      onClick={() => openLightbox(image.src)}
+      aria-label={`Open image: ${image.alt}`}
+      style={options.style}
+    >
+      <ResponsiveImage
+        src={image.src}
+        alt={image.alt}
+        widths={generatedWidthsFor(image)}
+        sizes={options.sizes ?? '(max-width: 768px) 100vw, 33vw'}
+        loading="lazy"
+        decoding="async"
+        style={options.imageStyle}
+      />
+    </button>
+  );
+
   return (
     <div className="home-container">
-      {/* Hero Section - with background image */}
       <section className="hero-section" id="home">
+        <div className="hero-media" aria-hidden="true">
+          <ResponsiveImage
+            src={heroImage.src}
+            alt=""
+            widths={generatedWidthsFor(heroImage)}
+            sizes="100vw"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <div className="hero-badge">BUCKLEY, WA · SINCE 2001</div>
@@ -55,7 +80,7 @@ export default function Home() {
           <div className="hero-cta">
             <a href="tel:2064911368" className="cta-button primary">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-              Call (206) 491-1368
+              Call or Text (206) 491-1368
             </a>
             <a href="mailto:Heidis.frames@gmail.com" className="cta-button secondary">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
@@ -126,47 +151,17 @@ export default function Home() {
         </AnimatedSection>
         <AnimatedSection delay={150}>
           <div className="image-gallery-grid">
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/P1010084.jpg')}>
-              <img
-                src="/images/P1010084.jpg"
-                alt="Beautifully framed art pieces displayed on a wall"
-                loading="lazy"
-              />
-            </div>
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/P1010091.jpg')}>
-              <img
-                src="/images/P1010091.jpg"
-                alt="Custom framed pictures with decorative accents"
-                loading="lazy"
-              />
-            </div>
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/P1010090.jpg')}>
-              <img
-                src="/images/P1010090.jpg"
-                alt="Elegant frame selection showcasing design expertise"
-                loading="lazy"
-              />
-            </div>
+            {renderGalleryItem(galleryImages[0])}
+            {renderGalleryItem(galleryImages[1])}
+            {renderGalleryItem(galleryImages[2])}
           </div>
           <div className="section-cta">
             <p>Love what you see? Let us frame your favorite piece.</p>
-            <a href="tel:2064911368" className="cta-button-inline">Schedule a Free Consultation →</a>
+            <a href="tel:2064911368" className="cta-button-inline">Call or text for an appointment →</a>
           </div>
           <div className="image-gallery-grid">
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/bourbon-bull.jpg')}>
-              <img
-                src="/images/bourbon-bull.jpg"
-                alt="Heidi with a vibrant large-scale Bourbon Street painting in custom frame"
-                loading="lazy"
-              />
-            </div>
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/gallery.jpg')}>
-              <img
-                src="/images/gallery.jpg"
-                alt="Framed landscape photograph elegantly displayed on a white wall"
-                loading="lazy"
-              />
-            </div>
+            {renderGalleryItem(galleryImages[3])}
+            {renderGalleryItem(galleryImages[4])}
           </div>
         </AnimatedSection>
       </section>
@@ -176,35 +171,11 @@ export default function Home() {
         <AnimatedSection>
           <div className="split-section reverse">
             <div className="split-images">
-              <div className="gallery-item large clickable" onClick={() => openLightbox('/images/DSC_0020.jpg')}>
-                <img
-                  src="/images/DSC_0020.jpg"
-                  alt="Expertly framed needlework piece"
-                  loading="lazy"
-                />
-              </div>
+              {renderGalleryItem(galleryImages[5], { className: 'large', sizes: '(max-width: 768px) 100vw, 50vw' })}
               <div className="split-images-row">
-                <div className="gallery-item clickable" onClick={() => openLightbox('/images/May_2011_046.jpg')}>
-                  <img
-                    src="/images/May_2011_046.jpg"
-                    alt="Needlework being carefully stretched"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="gallery-item clickable" onClick={() => openLightbox('/images/needlework.jpg')}>
-                  <img
-                    src="/images/needlework.jpg"
-                    alt="Finished needlework in elegant frame"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="gallery-item clickable" onClick={() => openLightbox('/images/kimono.jpg')}>
-                  <img
-                    src="/images/kimono.jpg"
-                    alt="Intricate kimono needlework in gold frame with sage mat"
-                    loading="lazy"
-                  />
-                </div>
+                {renderGalleryItem(galleryImages[6], { sizes: '(max-width: 768px) 50vw, 25vw' })}
+                {renderGalleryItem(galleryImages[7], { sizes: '(max-width: 768px) 50vw, 25vw' })}
+                {renderGalleryItem(galleryImages[8], { sizes: '(max-width: 768px) 50vw, 25vw' })}
               </div>
             </div>
             <div className="split-text">
@@ -244,40 +215,16 @@ export default function Home() {
         </AnimatedSection>
         <AnimatedSection delay={150}>
           <div className="image-gallery-grid wide">
-            <div className="gallery-item featured clickable" onClick={() => openLightbox('/images/May_2011_033.jpg')}>
-              <img
-                src="/images/May_2011_033.jpg"
-                alt="Custom framing with unique personal touches"
-                loading="lazy"
-              />
-            </div>
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/April_2007_149.jpg')}>
-              <img
-                src="/images/April_2007_149.jpg"
-                alt="Custom uniform and memorabilia framing"
-                loading="lazy"
-              />
-            </div>
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/June_2006_027.jpg')}>
-              <img
-                src="/images/June_2006_027.jpg"
-                alt="Creative multi-opening custom frame design"
-                loading="lazy"
-              />
-            </div>
+            {renderGalleryItem(galleryImages[9], { className: 'featured', sizes: '(max-width: 768px) 100vw, 50vw' })}
+            {renderGalleryItem(galleryImages[10], { sizes: '(max-width: 768px) 100vw, 50vw' })}
+            {renderGalleryItem(galleryImages[11], { sizes: '(max-width: 768px) 100vw, 50vw' })}
           </div>
           <div className="section-cta">
             <p>Have something special to frame? We love a creative challenge.</p>
             <a href="tel:2064911368" className="cta-button-inline">Let's Talk About Your Project →</a>
           </div>
           <div className="image-gallery-grid wide">
-            <div className="gallery-item featured clickable" onClick={() => openLightbox('/images/gallery-nature.jpg')}>
-              <img
-                src="/images/gallery-nature.jpg"
-                alt="Multi-panel ocean photography gallery wall installation"
-                loading="lazy"
-              />
-            </div>
+            {renderGalleryItem(galleryImages[12], { className: 'featured', sizes: '(max-width: 768px) 100vw, 50vw' })}
           </div>
         </AnimatedSection>
       </section>
@@ -313,38 +260,17 @@ export default function Home() {
               </div>
             </div>
             <div className="split-images">
-              <div className="gallery-item large clickable" onClick={() => openLightbox('/images/Heidi_38.jpg')}>
-                <img
-                  src="/images/Heidi_38.jpg"
-                  alt="Heidi carefully crafting a custom frame"
-                  loading="lazy"
-                />
-              </div>
+              {renderGalleryItem(galleryImages[13], { className: 'large', sizes: '(max-width: 768px) 100vw, 50vw' })}
               <div className="split-images-row">
-                <div className="gallery-item clickable" onClick={() => openLightbox('/images/Heidi_45.jpg')}>
-                  <img
-                    src="/images/Heidi_45.jpg"
-                    alt="Precision framing tools and craftsmanship"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="gallery-item clickable" onClick={() => openLightbox('/images/Heidi_47.jpg')}>
-                  <img
-                    src="/images/Heidi_47.jpg"
-                    alt="High-quality frame corner detail"
-                    loading="lazy"
-                  />
-                </div>
+                {renderGalleryItem(galleryImages[14], { sizes: '(max-width: 768px) 50vw, 25vw' })}
+                {renderGalleryItem(galleryImages[15], { sizes: '(max-width: 768px) 50vw, 25vw' })}
               </div>
             </div>
-            <div className="gallery-item clickable" onClick={() => openLightbox('/images/heidi-in-client.jpg')} style={{ marginTop: '16px' }}>
-              <img
-                src="/images/heidi-in-client.jpg"
-                alt="Heidi delivering and installing custom framed art at a client location"
-                loading="lazy"
-                style={{ objectPosition: 'center 35%' }}
-              />
-            </div>
+            {renderGalleryItem(galleryImages[16], {
+              sizes: '(max-width: 768px) 100vw, 50vw',
+              style: { marginTop: '16px' },
+              imageStyle: { objectPosition: 'center 35%' },
+            })}
           </div>
         </AnimatedSection>
       </section>
@@ -395,16 +321,16 @@ export default function Home() {
               <span className="section-label">Get in Touch</span>
               <h2>Personal Attention You Deserve</h2>
               <p>
-                We know your time is valuable. Heidi's Place provides you with a personal
-                appointment in our studio where you have one-on-one time with us. We can
-                also come to you! If you'd like to match your framing with your decor,
-                we make personal house or business calls, bringing our samples to you.
+                We know your time is valuable. Heidi's Place works by appointment in Buckley
+                with one-on-one design time in the studio. We can also come to you across
+                Buckley, Enumclaw, Bonney Lake, Sumner, and the Greater Puget Sound area,
+                bringing samples when your framing needs to match your home or business.
               </p>
               <div className="contact-info">
                 <a href="tel:2064911368" className="contact-item">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
                   <div>
-                    <strong>Phone</strong>
+                    <strong>Call or Text</strong>
                     <span>(206) 491-1368</span>
                   </div>
                 </a>
@@ -423,12 +349,32 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              <form className="request-form" onSubmit={handleRequestSubmit}>
+                <h3>Request an Appointment</h3>
+                <div className="form-field">
+                  <label htmlFor="request-name">Name</label>
+                  <input id="request-name" name="name" autoComplete="name" required />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="request-contact">Phone or Email</label>
+                  <input id="request-contact" name="contact" autoComplete="email" required />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="request-project">What are you framing?</label>
+                  <textarea id="request-project" name="project" rows={4} required />
+                </div>
+                <button type="submit" className="request-submit">Send Request</button>
+              </form>
             </div>
             <div className="about-right">
               <div className="about-image">
-                <img
-                  src="/images/heidi-studio.png"
-                  alt="Heidi in her framing studio surrounded by custom frames and materials"
+                <ResponsiveImage
+                  src={studioImage.src}
+                  alt={studioImage.alt}
+                  widths={generatedWidthsFor(studioImage)}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="about-map">

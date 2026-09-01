@@ -177,6 +177,27 @@
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .site-header,
+  .logo-link,
+  .nav-menu a,
+  .header-cta,
+  .menu-toggle,
+  .menu-toggle span {
+    transition: none;
+  }
+
+  .logo-link:hover,
+  .header-cta:hover,
+  .header-cta:active {
+    transform: none;
+  }
+}
+
 /* Responsive */
 @media (max-width: 968px) {
   .header-content {
@@ -255,4 +276,10 @@
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
