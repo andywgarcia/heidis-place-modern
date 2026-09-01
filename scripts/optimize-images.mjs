@@ -3,7 +3,8 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const inputDir = path.resolve('public/images');
-const widths = [480, 800, 1200, 1600];
+const maxGeneratedWidth = 2000;
+const widths = [480, 800, 1200, 1600, maxGeneratedWidth];
 const sourceExtensions = new Set(['.jpg', '.jpeg', '.png']);
 
 const files = await readdir(inputDir);
@@ -19,11 +20,14 @@ for (const file of files) {
   const name = path.basename(file, ext);
   const metadata = await sharp(input).metadata();
   const sourceWidth = metadata.width ?? 0;
-  const targetWidths = widths.filter((width) => width <= sourceWidth);
+  const cappedSourceWidth = Math.min(sourceWidth, maxGeneratedWidth);
+  const targetWidths = widths.filter((width) => width <= cappedSourceWidth);
 
-  if (sourceWidth > 0 && sourceWidth < widths.at(-1) && !targetWidths.includes(sourceWidth)) {
-    targetWidths.push(sourceWidth);
+  if (cappedSourceWidth > 0 && !targetWidths.includes(cappedSourceWidth)) {
+    targetWidths.push(cappedSourceWidth);
   }
+
+  console.log(`${file}: ${targetWidths.join(', ')}px`);
 
   for (const width of targetWidths) {
     const base = path.join(inputDir, `${name}-${width}`);

@@ -4,13 +4,15 @@ export interface SiteImage {
   width: number;
 }
 
-const responsiveWidths = [480, 800, 1200, 1600, 2000];
+const maxGeneratedWidth = 2000;
+const responsiveWidths = [480, 800, 1200, 1600, maxGeneratedWidth];
 
 export const generatedWidthsFor = (image: SiteImage) => {
-  const widths = responsiveWidths.filter((width) => width <= image.width);
+  const sourceWidth = Math.min(image.width, maxGeneratedWidth);
+  const widths = responsiveWidths.filter((width) => width <= sourceWidth);
 
-  if (!widths.includes(image.width)) {
-    widths.push(image.width);
+  if (!widths.includes(sourceWidth)) {
+    widths.push(sourceWidth);
   }
 
   return widths;
