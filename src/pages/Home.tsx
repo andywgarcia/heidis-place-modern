@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
 import './Home.css';
 import AnimatedSection from '../components/AnimatedSection';
 import Lightbox from '../components/Lightbox';
 import ResponsiveImage from '../components/ResponsiveImage';
-import { galleryImages, generatedWidthsFor, heroImage, studioImage, type SiteImage } from '../data/images';
+import {
+  galleryImages,
+  generatedWidthsFor,
+  heidiShowcaseImages,
+  heroImage,
+  studioImage,
+  type SiteImage,
+} from '../data/images';
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -14,6 +21,22 @@ export default function Home() {
     const idx = galleryImages.findIndex(img => img.src === src);
     setLightboxIndex(idx >= 0 ? idx : 0);
   };
+
+  const openFullGallery = useCallback(() => {
+    setLightboxIndex(0);
+  }, []);
+
+  useEffect(() => {
+    const handleOpenGallery = () => openFullGallery();
+    window.addEventListener('heidis-place:open-gallery', handleOpenGallery);
+
+    if (window.location.hash === '#gallery') {
+      window.setTimeout(openFullGallery, 0);
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+
+    return () => window.removeEventListener('heidis-place:open-gallery', handleOpenGallery);
+  }, [openFullGallery]);
 
   const handleRequestSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -54,88 +77,111 @@ export default function Home() {
   return (
     <div className="home-container">
       <section className="hero-section" id="home">
-        <div className="hero-media" aria-hidden="true">
-          <ResponsiveImage
-            src={heroImage.src}
-            alt=""
-            widths={generatedWidthsFor(heroImage)}
-            sizes="100vw"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
-        </div>
-        <div className="hero-overlay"></div>
         <div className="hero-content">
-          <div className="hero-badge">BUCKLEY, WA · SINCE 2001</div>
-          <h1 className="hero-headline">
-            The framing you need to{' '}
-            <span className="highlight">elevate your art</span>
-          </h1>
-          <p className="hero-description">
-            Heidi's Place evolves your artwork into a living, breathing masterpiece.
-            With over 20 years of experience and a Bachelor of Fine Arts degree,
-            we bring unsurpassed quality and design to transform your pictures into works of art.
-          </p>
-          <div className="hero-cta">
-            <a href="tel:2064911368" className="cta-button primary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-              Call or Text (206) 491-1368
-            </a>
-            <a href="mailto:Heidis.frames@gmail.com" className="cta-button secondary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
-              Email Us
-            </a>
+          <div className="hero-copy">
+            <div className="hero-badge">Established 1993</div>
+            <h1 className="hero-headline">
+              The framing you need to{' '}
+              <span className="highlight">elevate your art</span>
+            </h1>
+            <p className="hero-description">
+              Heidi's Place evolves your artwork into a living, breathing masterpiece.
+              With over 20 years of experience and a Bachelor of Fine Arts degree,
+              we bring unsurpassed quality and design to transform your pictures into works of art.
+            </p>
+            <div className="hero-cta">
+              <a href="tel:2064911368" className="cta-button primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                Call or Text (206) 491-1368
+              </a>
+              <a href="mailto:Heidis.frames@gmail.com" className="cta-button secondary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                Email Us
+              </a>
+            </div>
           </div>
+          <button
+            type="button"
+            className="hero-portrait"
+            onClick={() => openLightbox(heroImage.src)}
+            aria-label="Open hero portrait in gallery"
+          >
+            <ResponsiveImage
+              src={heroImage.src}
+              alt={heroImage.alt}
+              widths={generatedWidthsFor(heroImage)}
+              sizes="(max-width: 768px) 100vw, 42vw"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </button>
         </div>
       </section>
 
       {/* Features Grid - with SVG icons */}
       <section className="features-section">
+        <div className="features-grid">
+          <div className="feature-card">
+            <div className="feature-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="2" />
+                <rect x="5" y="5" width="14" height="14" rx="1" />
+                <line x1="5" y1="8" x2="19" y2="8" />
+              </svg>
+            </div>
+            <h3>Distinctive Framing</h3>
+            <p>Expert color and design selection to enhance your valuable art piece</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L12 8" />
+                <path d="M12 8C12 8 8 12 8 16C8 18.2 9.8 20 12 20C14.2 20 16 18.2 16 16C16 12 12 8 12 8Z" />
+                <path d="M9 13H15" />
+                <path d="M9 16H15" />
+              </svg>
+            </div>
+            <h3>Needlework Specialist</h3>
+            <p>Hand-stretched with stainless steel pins, never glue or sticky boards</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3L14.5 8.5L20.5 9.3L16.3 13.3L17.3 19.3L12 16.5L6.7 19.3L7.7 13.3L3.5 9.3L9.5 8.5L12 3Z" />
+              </svg>
+            </div>
+            <h3>A Unique Touch</h3>
+            <p>Creative solutions including special cuts, plaques, and custom mat designs</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+            </div>
+            <h3>Quality Materials</h3>
+            <p>Acid-free rag mats, UV glass, and museum-quality mounting</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="gallery-section studio-moments-section" id="gallery">
         <AnimatedSection>
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="2" />
-                  <rect x="5" y="5" width="14" height="14" rx="1" />
-                  <line x1="5" y1="8" x2="19" y2="8" />
-                </svg>
-              </div>
-              <h3>Distinctive Framing</h3>
-              <p>Expert color and design selection to enhance your valuable art piece</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2L12 8" />
-                  <path d="M12 8C12 8 8 12 8 16C8 18.2 9.8 20 12 20C14.2 20 16 18.2 16 16C16 12 12 8 12 8Z" />
-                  <path d="M9 13H15" />
-                  <path d="M9 16H15" />
-                </svg>
-              </div>
-              <h3>Needlework Specialist</h3>
-              <p>Hand-stretched with stainless steel pins, never glue or sticky boards</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3L14.5 8.5L20.5 9.3L16.3 13.3L17.3 19.3L12 16.5L6.7 19.3L7.7 13.3L3.5 9.3L9.5 8.5L12 3Z" />
-                </svg>
-              </div>
-              <h3>A Unique Touch</h3>
-              <p>Creative solutions including special cuts, plaques, and custom mat designs</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" />
-                  <polyline points="9 12 11 14 15 10" />
-                </svg>
-              </div>
-              <h3>Quality Materials</h3>
-              <p>Acid-free rag mats, UV glass, and museum-quality mounting</p>
-            </div>
+          <div className="section-header">
+            <span className="section-label">Gallery</span>
+            <h2>Studio Moments</h2>
+            <p>Step inside Heidi's Place: frame samples, design details, finished work, and the hands-on attention behind every custom project.</p>
+          </div>
+        </AnimatedSection>
+        <AnimatedSection delay={150}>
+          <div className="image-gallery-grid studio-moments-grid">
+            {heidiShowcaseImages.map((image, index) => renderGalleryItem(image, {
+              className: index === 0 || index === 3 ? 'large' : undefined,
+              sizes: '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw',
+              imageStyle: index >= 8 ? { objectPosition: 'center top' } : undefined,
+            }))}
           </div>
         </AnimatedSection>
       </section>

@@ -41,6 +41,18 @@ export default function Layout() {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
+  const openGallery = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuOpen(false);
+
+    if (location.pathname !== '/') {
+      window.location.href = '/#gallery';
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent('heidis-place:open-gallery'));
+  };
+
   const isHomePage = location.pathname === '/';
 
   return (
@@ -61,6 +73,7 @@ export default function Layout() {
 
           <nav id="primary-navigation" className={`nav-menu ${menuOpen ? 'open' : ''}`}>
             <a href="#distinctive-framing" onClick={(e) => scrollToSection(e, 'distinctive-framing')}>Framing</a>
+            <a href="#gallery" onClick={openGallery}>Gallery</a>
             <a href="#needlework-specialist" onClick={(e) => scrollToSection(e, 'needlework-specialist')}>Needlework</a>
             <a href="#a-unique-touch" onClick={(e) => scrollToSection(e, 'a-unique-touch')}>Unique Touch</a>
             <a href="#quality" onClick={(e) => scrollToSection(e, 'quality')}>Quality</a>

@@ -55,7 +55,7 @@ heidis-place-modern/
 
 - Fully responsive design (mobile → ultra-wide)
 - Scroll-triggered fade-in animations
-- Click-to-fullscreen image lightbox (17 images, keyboard navigable)
+- Click-to-fullscreen image lightbox (29 images, keyboard navigable)
 - Google Maps embed with Buckley, WA pin
 - Real customer testimonials from Google Reviews
 - Per-section calls to action
