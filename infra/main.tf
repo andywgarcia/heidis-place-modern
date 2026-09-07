@@ -170,6 +170,9 @@ resource "aws_cloudfront_distribution" "spa" {
   default_root_object = "index.html"
   aliases             = local.cloudfront_aliases
   price_class         = "PriceClass_100" # US, Canada, Europe — cheapest
+  tags = {
+    jarvis-enabled = "true"
+  }
 
   origin {
     domain_name              = aws_s3_bucket.spa.bucket_regional_domain_name
