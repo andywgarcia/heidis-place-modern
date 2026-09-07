@@ -1,6 +1,6 @@
 # Heidi's Place Infrastructure
 
-This directory is the intended source of truth for the Heidi's Place AWS hosting stack.
+This directory is the source of truth for the Heidi's Place AWS hosting stack.
 
 ## Managed In Terraform
 
@@ -19,13 +19,13 @@ This directory is the intended source of truth for the Heidi's Place AWS hosting
 
 ## Not Managed Here
 
-The production DNS zone for `heidisplaceframes.com` is outside this AWS account's Route53 zones. The validation CNAMEs already exist there, and the final apex/www traffic records still need to be changed in that external DNS provider after CloudFront is updated.
+The production DNS zone for `heidisplaceframes.com` is outside this AWS account's Route53 zones. The validation CNAMEs already exist there, and the final apex/www traffic records still need to be changed in that external DNS provider.
 
 Preserve the existing GoDaddy MX records.
 
 ## State Recovery
 
-The live AWS resources are tagged `ManagedBy=terraform`, but no Terraform state file is present locally. Do not run a normal apply against empty state. First run Terraform with the import blocks in `imports.tf` using an AWS principal that can read and update CloudFront, ACM, S3, Route53, and IAM.
+The live AWS resources are tracked in local Terraform state. For a fresh machine or remote backend, do not run a normal apply against empty state. First run Terraform with the import blocks in `imports.tf` using an AWS principal that can read and update CloudFront, ACM, S3, Route53, and IAM.
 
 Recommended first recovery flow for a fresh machine or remote backend:
 
@@ -36,19 +36,15 @@ terraform -chdir=infra apply tfplan
 terraform -chdir=infra state list
 ```
 
-Expected high-level result after imports: existing resources are adopted into state, then CloudFront is updated to attach `heidisplaceframes.com`, `www.heidisplaceframes.com`, and the combined certificate.
+Expected high-level result after imports: existing resources are adopted into state. CloudFront should already have `heidisplaceframes.com`, `www.heidisplaceframes.com`, `heidis-place.andys-codex.com`, and the combined certificate.
 
-As of 2026-09-07, the current local AWS IAM user `openclaw-jarvis` successfully imported the existing stack into local Terraform state, but apply is blocked on the final CloudFront change:
+As of 2026-09-07 10:08 PDT, the current local AWS IAM user `openclaw-jarvis` successfully imported the existing stack into local Terraform state, applied the CloudFront alias/certificate/security-header change, and `terraform plan` is clean.
 
-```txt
-cloudfront:UpdateDistribution on arn:aws:cloudfront::228732469808:distribution/E1TMNG3NQ9SVLO
-```
-
-Use a more privileged role, grant that action, or run the GitHub Actions Terraform apply workflow with a role that has it before changing production DNS.
+AWS infrastructure changes for this site should go through Terraform. Do not update CloudFront, ACM, S3, Route53 staging records, or IAM by hand except to repair Terraform execution access.
 
 ## External DNS Cutover
 
-After Terraform applies and CloudFront reaches `Deployed`, update the external DNS provider:
+CloudFront is already deployed. Update the external DNS provider:
 
 ```txt
 heidisplaceframes.com      ALIAS/ANAME/flattened CNAME  d1gk8ll36y7lil.cloudfront.net
@@ -78,7 +74,7 @@ Required GitHub configuration for Option A:
 
 Option B, interim: keep CI to fmt/validate only, then run import/plan/apply locally or from a trusted machine with an authorized AWS profile. This is acceptable until the Terraform role and remote state are bootstrapped.
 
-Option C, full DNS as code later: move `heidisplaceframes.com` DNS to Route53 or another Terraform-supported DNS provider. Then manage apex/www and MX records in Terraform too. This is cleaner, but it is a domain migration, not a quick cutover.
+Option C, full DNS as code later: move `heidisplaceframes.com` DNS to Route53 or another Terraform-supported DNS provider. Then manage apex, www, MX, and ACM validation records in Terraform too. This is cleaner, but it is a domain migration, not a quick cutover.
 
 For remote state, prefer an S3 backend with native lockfile support. The included workflows can create a backend config dynamically from repository variables:
 
