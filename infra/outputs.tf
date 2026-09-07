@@ -39,7 +39,7 @@ output "certificate_arn" {
 }
 
 output "external_dns_cutover_records" {
-  description = "Records to create in the external DNS provider after CloudFront deploys"
+  description = "Legacy records for external DNS providers that support apex alias records"
   value = {
     apex = {
       type  = "ALIAS/ANAME/flattened CNAME"
@@ -52,4 +52,14 @@ output "external_dns_cutover_records" {
       value = aws_cloudfront_distribution.spa.domain_name
     }
   }
+}
+
+output "production_route53_zone_id" {
+  description = "Route53 hosted zone ID for production DNS"
+  value       = aws_route53_zone.production.zone_id
+}
+
+output "production_route53_nameservers" {
+  description = "Nameservers to set at the domain registrar for production DNS cutover"
+  value       = aws_route53_zone.production.name_servers
 }

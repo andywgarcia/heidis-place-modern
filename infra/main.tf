@@ -39,6 +39,12 @@ locals {
   production_domains = var.enable_production_domains ? [var.production_domain, "www.${var.production_domain}"] : []
   cloudfront_aliases = sort(distinct(concat([local.staging_domain], local.production_domains)))
   bucket_name        = "${var.subdomain}-${replace(var.domain_name, ".", "-")}"
+  production_mail_cnames = {
+    imap = "imap.secureserver.net."
+    mail = "pop.secureserver.net."
+    pop  = "pop.secureserver.net."
+    smtp = "smtp.secureserver.net."
+  }
 }
 
 data "aws_route53_zone" "main" {
@@ -146,6 +152,8 @@ resource "aws_acm_certificate_validation" "spa" {
     [for r in aws_route53_record.cert_validation : r.fqdn],
     var.external_certificate_validation_record_fqdns,
   )
+
+  depends_on = [aws_route53_record.production_cert_validation]
 }
 
 ###############################################################################
@@ -243,6 +251,99 @@ resource "aws_route53_record" "spa" {
     zone_id                = aws_cloudfront_distribution.spa.hosted_zone_id
     evaluate_target_health = false
   }
+}
+
+###############################################################################
+# Route 53 — production DNS zone
+###############################################################################
+
+resource "aws_route53_zone" "production" {
+  name = var.production_domain
+}
+
+resource "aws_route53_record" "production_cert_validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.spa.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      type   = dvo.resource_record_type
+      record = dvo.resource_record_value
+    } if dvo.domain_name != local.staging_domain
+  }
+
+  zone_id = aws_route53_zone.production.zone_id
+  name    = each.value.name
+  type    = each.value.type
+  ttl     = 60
+  records = [each.value.record]
+}
+
+resource "aws_route53_record" "production_apex_a" {
+  zone_id = aws_route53_zone.production.zone_id
+  name    = var.production_domain
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.spa.domain_name
+    zone_id                = aws_cloudfront_distribution.spa.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "production_apex_aaaa" {
+  zone_id = aws_route53_zone.production.zone_id
+  name    = var.production_domain
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.spa.domain_name
+    zone_id                = aws_cloudfront_distribution.spa.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "production_www_a" {
+  zone_id = aws_route53_zone.production.zone_id
+  name    = "www.${var.production_domain}"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.spa.domain_name
+    zone_id                = aws_cloudfront_distribution.spa.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "production_www_aaaa" {
+  zone_id = aws_route53_zone.production.zone_id
+  name    = "www.${var.production_domain}"
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.spa.domain_name
+    zone_id                = aws_cloudfront_distribution.spa.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "production_mx" {
+  zone_id = aws_route53_zone.production.zone_id
+  name    = var.production_domain
+  type    = "MX"
+  ttl     = 3600
+  records = [
+    "0 smtp.secureserver.net.",
+    "10 mailstore1.secureserver.net.",
+  ]
+}
+
+resource "aws_route53_record" "production_mail_cnames" {
+  for_each = local.production_mail_cnames
+
+  zone_id = aws_route53_zone.production.zone_id
+  name    = "${each.key}.${var.production_domain}"
+  type    = "CNAME"
+  ttl     = 3600
+  records = [each.value]
 }
 
 ###############################################################################

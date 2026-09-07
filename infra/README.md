@@ -14,14 +14,18 @@ This directory is the source of truth for the Heidi's Place AWS hosting stack.
 - CloudFront distribution `E1TMNG3NQ9SVLO`
 - Route53 staging record for `heidis-place.andys-codex.com`
 - Route53 staging ACM validation record
+- Route53 production hosted zone for `heidisplaceframes.com`
+- Route53 production apex and `www` CloudFront alias records
+- Route53 production ACM validation records
+- Route53 production GoDaddy/SecureServer mail records
 - GitHub Actions OIDC provider
 - GitHub Actions deploy role and deploy policy
 
 ## Not Managed Here
 
-The production DNS zone for `heidisplaceframes.com` is outside this AWS account's Route53 zones. The validation CNAMEs already exist there, and the final apex/www traffic records still need to be changed in that external DNS provider.
+The domain registrar is still external. After Terraform creates the Route53 hosted zone, update the registrar nameservers for `heidisplaceframes.com` to the `production_route53_nameservers` output.
 
-Preserve the existing GoDaddy MX records.
+As of 2026-09-07 13:08 PDT, applying the Route53 production hosted zone is blocked because IAM user `openclaw-jarvis` lacks `route53:CreateHostedZone` and production-domain `route53:ChangeResourceRecordSets`.
 
 ## State Recovery
 
@@ -42,13 +46,12 @@ As of 2026-09-07 10:08 PDT, the current local AWS IAM user `openclaw-jarvis` suc
 
 AWS infrastructure changes for this site should go through Terraform. Do not update CloudFront, ACM, S3, Route53 staging records, or IAM by hand except to repair Terraform execution access.
 
-## External DNS Cutover
+## Registrar Cutover
 
-CloudFront is already deployed. Update the external DNS provider:
+CloudFront and Route53 records are managed in Terraform. The only manual production cutover step is changing the domain nameservers at the registrar:
 
-```txt
-heidisplaceframes.com      ALIAS/ANAME/flattened CNAME  d1gk8ll36y7lil.cloudfront.net
-www.heidisplaceframes.com  CNAME                        d1gk8ll36y7lil.cloudfront.net
+```sh
+terraform output production_route53_nameservers
 ```
 
 Then verify:
@@ -83,3 +86,20 @@ For remote state, prefer an S3 backend with native lockfile support. The include
 - `TF_STATE_REGION`
 
 Use a protected environment before enabling apply. Infrastructure should not be one accidental button away from comedy.
+
+## IAM Grant Needed
+
+The current execution principal already has read-only Route53 access and scoped staging-record management, but not production hosted-zone creation.
+
+Grant the Terraform execution principal:
+
+- `route53:CreateHostedZone`
+- `route53:ChangeTagsForResource`
+- `route53:ChangeResourceRecordSets` constrained to `heidisplaceframes.com`, `www.heidisplaceframes.com`, the ACM validation CNAME names, and the GoDaddy mail helper names
+
+After the grant, rerun:
+
+```sh
+terraform -chdir=infra apply tfplan
+terraform -chdir=infra output production_route53_nameservers
+```
