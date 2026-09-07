@@ -1,0 +1,89 @@
+# Heidi's Place Infrastructure
+
+This directory is the intended source of truth for the Heidi's Place AWS hosting stack.
+
+## Managed In Terraform
+
+- S3 bucket `heidis-place-andys-codex-com`
+- S3 public access block, ownership controls, bucket policy, and default encryption
+- ACM certificate in `us-east-1` for:
+  - `heidisplaceframes.com`
+  - `www.heidisplaceframes.com`
+  - `heidis-place.andys-codex.com`
+- CloudFront origin access control
+- CloudFront distribution `E1TMNG3NQ9SVLO`
+- Route53 staging record for `heidis-place.andys-codex.com`
+- Route53 staging ACM validation record
+- GitHub Actions OIDC provider
+- GitHub Actions deploy role and deploy policy
+
+## Not Managed Here
+
+The production DNS zone for `heidisplaceframes.com` is outside this AWS account's Route53 zones. The validation CNAMEs already exist there, and the final apex/www traffic records still need to be changed in that external DNS provider after CloudFront is updated.
+
+Preserve the existing GoDaddy MX records.
+
+## State Recovery
+
+The live AWS resources are tagged `ManagedBy=terraform`, but no Terraform state file is present locally. Do not run a normal apply against empty state. First run Terraform with the import blocks in `imports.tf` using an AWS principal that can read and update CloudFront, ACM, S3, Route53, and IAM.
+
+Recommended first recovery flow for a fresh machine or remote backend:
+
+```sh
+terraform -chdir=infra init
+terraform -chdir=infra plan -out=tfplan
+terraform -chdir=infra apply tfplan
+terraform -chdir=infra state list
+```
+
+Expected high-level result after imports: existing resources are adopted into state, then CloudFront is updated to attach `heidisplaceframes.com`, `www.heidisplaceframes.com`, and the combined certificate.
+
+As of 2026-09-07, the current local AWS IAM user `openclaw-jarvis` successfully imported the existing stack into local Terraform state, but apply is blocked on the final CloudFront change:
+
+```txt
+cloudfront:UpdateDistribution on arn:aws:cloudfront::228732469808:distribution/E1TMNG3NQ9SVLO
+```
+
+Use a more privileged role, grant that action, or run the GitHub Actions Terraform apply workflow with a role that has it before changing production DNS.
+
+## External DNS Cutover
+
+After Terraform applies and CloudFront reaches `Deployed`, update the external DNS provider:
+
+```txt
+heidisplaceframes.com      ALIAS/ANAME/flattened CNAME  d1gk8ll36y7lil.cloudfront.net
+www.heidisplaceframes.com  CNAME                        d1gk8ll36y7lil.cloudfront.net
+```
+
+Then verify:
+
+```sh
+dig +short heidisplaceframes.com A
+dig +short www.heidisplaceframes.com CNAME
+curl -I -L --max-time 20 https://heidisplaceframes.com/
+curl -I -L --max-time 20 https://www.heidisplaceframes.com/
+```
+
+## CI/CD Options
+
+Option A, recommended: GitHub Actions runs `terraform-check` on PRs and manual `terraform-plan` / `terraform-apply` workflows through a protected GitHub environment. Use a dedicated AWS role in secret `AWS_TERRAFORM_ROLE_ARN`, separate from the site deploy role.
+
+Required GitHub configuration for Option A:
+
+- Secret: `AWS_TERRAFORM_ROLE_ARN`
+- Variable: `TF_STATE_BUCKET`
+- Variable: `TF_STATE_KEY`
+- Variable: `TF_STATE_REGION`
+- Protected environment: `terraform-apply`
+
+Option B, interim: keep CI to fmt/validate only, then run import/plan/apply locally or from a trusted machine with an authorized AWS profile. This is acceptable until the Terraform role and remote state are bootstrapped.
+
+Option C, full DNS as code later: move `heidisplaceframes.com` DNS to Route53 or another Terraform-supported DNS provider. Then manage apex/www and MX records in Terraform too. This is cleaner, but it is a domain migration, not a quick cutover.
+
+For remote state, prefer an S3 backend with native lockfile support. The included workflows can create a backend config dynamically from repository variables:
+
+- `TF_STATE_BUCKET`
+- `TF_STATE_KEY`
+- `TF_STATE_REGION`
+
+Use a protected environment before enabling apply. Infrastructure should not be one accidental button away from comedy.

@@ -35,8 +35,10 @@ provider "aws" {
 }
 
 locals {
-  fqdn        = "${var.subdomain}.${var.domain_name}"
-  bucket_name = "${var.subdomain}-${replace(var.domain_name, ".", "-")}"
+  staging_domain     = "${var.subdomain}.${var.domain_name}"
+  production_domains = var.enable_production_domains ? [var.production_domain, "www.${var.production_domain}"] : []
+  cloudfront_aliases = sort(distinct(concat([local.staging_domain], local.production_domains)))
+  bucket_name        = "${var.subdomain}-${replace(var.domain_name, ".", "-")}"
 }
 
 data "aws_route53_zone" "main" {
@@ -50,6 +52,24 @@ data "aws_route53_zone" "main" {
 
 resource "aws_s3_bucket" "spa" {
   bucket = local.bucket_name
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "spa" {
+  bucket = aws_s3_bucket.spa.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "spa" {
+  bucket = aws_s3_bucket.spa.id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "spa" {
@@ -86,12 +106,20 @@ resource "aws_s3_bucket_policy" "spa" {
 ###############################################################################
 
 resource "aws_acm_certificate" "spa" {
-  provider          = aws.us_east_1
-  domain_name       = local.fqdn
+  provider    = aws.us_east_1
+  domain_name = var.production_domain
+  subject_alternative_names = [
+    local.staging_domain,
+    "www.${var.production_domain}",
+  ]
   validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true
+    ignore_changes = [
+      tags,
+      tags_all,
+    ]
   }
 }
 
@@ -101,7 +129,7 @@ resource "aws_route53_record" "cert_validation" {
       name   = dvo.resource_record_name
       type   = dvo.resource_record_type
       record = dvo.resource_record_value
-    }
+    } if dvo.domain_name == local.staging_domain
   }
 
   zone_id = data.aws_route53_zone.main.zone_id
@@ -112,9 +140,12 @@ resource "aws_route53_record" "cert_validation" {
 }
 
 resource "aws_acm_certificate_validation" "spa" {
-  provider                = aws.us_east_1
-  certificate_arn         = aws_acm_certificate.spa.arn
-  validation_record_fqdns = [for r in aws_route53_record.cert_validation : r.fqdn]
+  provider        = aws.us_east_1
+  certificate_arn = aws_acm_certificate.spa.arn
+  validation_record_fqdns = concat(
+    [for r in aws_route53_record.cert_validation : r.fqdn],
+    var.external_certificate_validation_record_fqdns,
+  )
 }
 
 ###############################################################################
@@ -123,6 +154,7 @@ resource "aws_acm_certificate_validation" "spa" {
 
 resource "aws_cloudfront_origin_access_control" "spa" {
   name                              = local.bucket_name
+  description                       = "Managed by Terraform"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
@@ -136,7 +168,7 @@ resource "aws_cloudfront_distribution" "spa" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  aliases             = [local.fqdn]
+  aliases             = local.cloudfront_aliases
   price_class         = "PriceClass_100" # US, Canada, Europe — cheapest
 
   origin {
@@ -200,7 +232,7 @@ resource "aws_cloudfront_distribution" "spa" {
 
 resource "aws_route53_record" "spa" {
   zone_id = data.aws_route53_zone.main.zone_id
-  name    = local.fqdn
+  name    = local.staging_domain
   type    = "A"
 
   alias {
