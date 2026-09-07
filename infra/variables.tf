@@ -42,3 +42,15 @@ variable "external_certificate_validation_record_fqdns" {
     "_106dfd8d8c089181ad02f28c73293c8f.www.heidisplaceframes.com.",
   ]
 }
+
+variable "terraform_state_bucket_name" {
+  description = "S3 bucket used by GitHub Actions for Terraform remote state"
+  type        = string
+  default     = "andys-codex-terraform-states"
+}
+
+variable "terraform_state_key" {
+  description = "S3 object key used by GitHub Actions for Terraform remote state"
+  type        = string
+  default     = "heidis-place/terraform.tfstate"
+}

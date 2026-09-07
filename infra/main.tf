@@ -35,10 +35,11 @@ provider "aws" {
 }
 
 locals {
-  staging_domain     = "${var.subdomain}.${var.domain_name}"
-  production_domains = var.enable_production_domains ? [var.production_domain, "www.${var.production_domain}"] : []
-  cloudfront_aliases = sort(distinct(concat([local.staging_domain], local.production_domains)))
-  bucket_name        = "${var.subdomain}-${replace(var.domain_name, ".", "-")}"
+  staging_domain      = "${var.subdomain}.${var.domain_name}"
+  production_domains  = var.enable_production_domains ? [var.production_domain, "www.${var.production_domain}"] : []
+  cloudfront_aliases  = sort(distinct(concat([local.staging_domain], local.production_domains)))
+  bucket_name         = "${var.subdomain}-${replace(var.domain_name, ".", "-")}"
+  terraform_role_name = "github-actions-terraform-${local.bucket_name}"
   production_mail_cnames = {
     imap = "imap.secureserver.net."
     mail = "pop.secureserver.net."
@@ -362,6 +363,10 @@ resource "aws_iam_openid_connect_provider" "github" {
   }
 }
 
+###############################################################################
+# GitHub Actions site deploy role
+###############################################################################
+
 resource "aws_iam_role" "github_actions" {
   name = "github-actions-${local.bucket_name}"
 
@@ -382,6 +387,224 @@ resource "aws_iam_role" "github_actions" {
             "token.actions.githubusercontent.com:sub" = "repo:${var.github_org}/${var.github_repo}:ref:refs/heads/main"
           }
         }
+      }
+    ]
+  })
+}
+
+###############################################################################
+# GitHub Actions Terraform role
+###############################################################################
+
+resource "aws_iam_role" "github_terraform" {
+  name = local.terraform_role_name
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:${var.github_org}/${var.github_repo}:environment:terraform-plan",
+              "repo:${var.github_org}/${var.github_repo}:environment:terraform-apply",
+            ]
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "github_terraform" {
+  name = "terraform-spa-infra"
+  role = aws_iam_role.github_terraform.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "TerraformStateBackendList"
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = "arn:aws:s3:::${var.terraform_state_bucket_name}"
+        Condition = {
+          StringLike = {
+            "s3:prefix" = [
+              var.terraform_state_key,
+              "${var.terraform_state_key}.tflock",
+            ]
+          }
+        }
+      },
+      {
+        Sid    = "TerraformStateBackendObjects"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::${var.terraform_state_bucket_name}/${var.terraform_state_key}",
+          "arn:aws:s3:::${var.terraform_state_bucket_name}/${var.terraform_state_key}.tflock",
+        ]
+      },
+      {
+        Sid    = "ManageSiteBucket"
+        Effect = "Allow"
+        Action = [
+          "s3:CreateBucket",
+          "s3:DeleteBucket",
+          "s3:GetBucketLocation",
+          "s3:GetBucketPolicy",
+          "s3:PutBucketPolicy",
+          "s3:DeleteBucketPolicy",
+          "s3:GetBucketPublicAccessBlock",
+          "s3:PutBucketPublicAccessBlock",
+          "s3:DeleteBucketPublicAccessBlock",
+          "s3:GetBucketOwnershipControls",
+          "s3:PutBucketOwnershipControls",
+          "s3:DeleteBucketOwnershipControls",
+          "s3:GetEncryptionConfiguration",
+          "s3:PutEncryptionConfiguration",
+          "s3:GetBucketTagging",
+          "s3:PutBucketTagging",
+          "s3:ListBucket"
+        ]
+        Resource = aws_s3_bucket.spa.arn
+      },
+      {
+        Sid    = "CreateCloudFrontDistribution"
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateDistribution"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ManageCloudFrontDistribution"
+        Effect = "Allow"
+        Action = [
+          "cloudfront:GetDistribution",
+          "cloudfront:GetDistributionConfig",
+          "cloudfront:UpdateDistribution",
+          "cloudfront:DeleteDistribution",
+          "cloudfront:ListTagsForResource",
+          "cloudfront:TagResource",
+          "cloudfront:UntagResource"
+        ]
+        Resource = aws_cloudfront_distribution.spa.arn
+      },
+      {
+        Sid    = "ManageCloudFrontSharedResources"
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateOriginAccessControl",
+          "cloudfront:GetOriginAccessControl",
+          "cloudfront:GetOriginAccessControlConfig",
+          "cloudfront:UpdateOriginAccessControl",
+          "cloudfront:DeleteOriginAccessControl",
+          "cloudfront:ListOriginAccessControls",
+          "cloudfront:GetResponseHeadersPolicy",
+          "cloudfront:ListResponseHeadersPolicies"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ManageCertificate"
+        Effect = "Allow"
+        Action = [
+          "acm:RequestCertificate",
+          "acm:DescribeCertificate",
+          "acm:DeleteCertificate",
+          "acm:AddTagsToCertificate",
+          "acm:ListTagsForCertificate",
+          "acm:RemoveTagsFromCertificate"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ListRoute53"
+        Effect = "Allow"
+        Action = [
+          "route53:GetChange",
+          "route53:ListHostedZones",
+          "route53:ListHostedZonesByName"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "CreateProductionHostedZone"
+        Effect = "Allow"
+        Action = [
+          "route53:CreateHostedZone"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ManageRoute53Zones"
+        Effect = "Allow"
+        Action = [
+          "route53:GetHostedZone",
+          "route53:ListResourceRecordSets",
+          "route53:ChangeResourceRecordSets",
+          "route53:ChangeTagsForResource",
+          "route53:ListTagsForResource",
+          "route53:DeleteHostedZone"
+        ]
+        Resource = "arn:aws:route53:::hostedzone/*"
+      },
+      {
+        Sid    = "CreateGitHubOidcProvider"
+        Effect = "Allow"
+        Action = [
+          "iam:CreateOpenIDConnectProvider"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ManageGitHubOidcProvider"
+        Effect = "Allow"
+        Action = [
+          "iam:GetOpenIDConnectProvider",
+          "iam:DeleteOpenIDConnectProvider",
+          "iam:UpdateOpenIDConnectProviderThumbprint",
+          "iam:TagOpenIDConnectProvider",
+          "iam:UntagOpenIDConnectProvider"
+        ]
+        Resource = aws_iam_openid_connect_provider.github.arn
+      },
+      {
+        Sid    = "ManageGitHubActionsRoles"
+        Effect = "Allow"
+        Action = [
+          "iam:GetRole",
+          "iam:CreateRole",
+          "iam:DeleteRole",
+          "iam:UpdateAssumeRolePolicy",
+          "iam:PutRolePolicy",
+          "iam:GetRolePolicy",
+          "iam:DeleteRolePolicy",
+          "iam:ListRolePolicies",
+          "iam:TagRole",
+          "iam:UntagRole",
+          "iam:ListRoleTags"
+        ]
+        Resource = [
+          aws_iam_role.github_actions.arn,
+          aws_iam_role.github_terraform.arn,
+        ]
       }
     ]
   })

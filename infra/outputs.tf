@@ -14,8 +14,13 @@ output "cloudfront_domain" {
 }
 
 output "github_actions_role_arn" {
-  description = "IAM role ARN for GitHub Actions to assume via OIDC"
+  description = "IAM role ARN for GitHub Actions site deploys"
   value       = aws_iam_role.github_actions.arn
+}
+
+output "github_terraform_role_arn" {
+  description = "IAM role ARN for GitHub Actions Terraform runs"
+  value       = aws_iam_role.github_terraform.arn
 }
 
 output "site_url" {

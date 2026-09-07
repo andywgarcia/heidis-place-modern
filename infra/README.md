@@ -25,7 +25,7 @@ This directory is the source of truth for the Heidi's Place AWS hosting stack.
 
 The domain registrar is still external. After Terraform creates the Route53 hosted zone, update the registrar nameservers for `heidisplaceframes.com` to the `production_route53_nameservers` output.
 
-As of 2026-09-07 13:08 PDT, applying the Route53 production hosted zone is blocked because IAM user `openclaw-jarvis` lacks `route53:CreateHostedZone` and production-domain `route53:ChangeResourceRecordSets`.
+Local automation users do not apply this stack and should not receive infrastructure mutation permissions. Terraform runs through GitHub Actions using the dedicated role in `AWS_TERRAFORM_ROLE_ARN`.
 
 ## State Recovery
 
@@ -41,8 +41,6 @@ terraform -chdir=infra state list
 ```
 
 Expected high-level result after imports: existing resources are adopted into state. CloudFront should already have `heidisplaceframes.com`, `www.heidisplaceframes.com`, `heidis-place.andys-codex.com`, and the combined certificate.
-
-As of 2026-09-07 10:08 PDT, the current local AWS IAM user `openclaw-jarvis` successfully imported the existing stack into local Terraform state, applied the CloudFront alias/certificate/security-header change, and `terraform plan` is clean.
 
 AWS infrastructure changes for this site should go through Terraform. Do not update CloudFront, ACM, S3, Route53 staging records, or IAM by hand except to repair Terraform execution access.
 
@@ -63,43 +61,48 @@ curl -I -L --max-time 20 https://heidisplaceframes.com/
 curl -I -L --max-time 20 https://www.heidisplaceframes.com/
 ```
 
-## CI/CD Options
+## CI/CD
 
-Option A, recommended: GitHub Actions runs `terraform-check` on PRs and manual `terraform-plan` / `terraform-apply` workflows through a protected GitHub environment. Use a dedicated AWS role in secret `AWS_TERRAFORM_ROLE_ARN`, separate from the site deploy role.
+GitHub Actions is the Terraform execution path. The local `openclaw-jarvis` user may inspect state for diagnostics, but it should not plan or apply infrastructure changes.
 
-Required GitHub configuration for Option A:
+Workflows:
+
+- `.github/workflows/terraform-check.yml`: runs fmt/init/validate without AWS credentials on PRs and `main` pushes.
+- `.github/workflows/terraform-plan.yml`: manual plan through the `terraform-plan` environment.
+- `.github/workflows/terraform-apply.yml`: manual apply through the `terraform-apply` environment. It creates a saved plan, waits at the protected apply environment, then applies that exact plan.
+
+Use a dedicated AWS role in secret `AWS_TERRAFORM_ROLE_ARN`, separate from the site deploy role in `AWS_ROLE_ARN`.
+
+Required GitHub configuration:
 
 - Secret: `AWS_TERRAFORM_ROLE_ARN`
 - Variable: `TF_STATE_BUCKET`
 - Variable: `TF_STATE_KEY`
 - Variable: `TF_STATE_REGION`
+- Protected environment: `terraform-plan`
 - Protected environment: `terraform-apply`
 
-Option B, interim: keep CI to fmt/validate only, then run import/plan/apply locally or from a trusted machine with an authorized AWS profile. This is acceptable until the Terraform role and remote state are bootstrapped.
+Set the variables to match `variables.tf` unless intentionally changing the backend:
 
-Option C, full DNS as code later: move `heidisplaceframes.com` DNS to Route53 or another Terraform-supported DNS provider. Then manage apex, www, MX, and ACM validation records in Terraform too. This is cleaner, but it is a domain migration, not a quick cutover.
-
-For remote state, prefer an S3 backend with native lockfile support. The included workflows can create a backend config dynamically from repository variables:
-
-- `TF_STATE_BUCKET`
-- `TF_STATE_KEY`
-- `TF_STATE_REGION`
+- `TF_STATE_BUCKET=andys-codex-terraform-states`
+- `TF_STATE_KEY=heidis-place/terraform.tfstate`
+- `TF_STATE_REGION=us-west-2`
 
 Use a protected environment before enabling apply. Infrastructure should not be one accidental button away from comedy.
 
-## IAM Grant Needed
+## Terraform Role Bootstrap
 
-The current execution principal already has read-only Route53 access and scoped staging-record management, but not production hosted-zone creation.
+There is one unavoidable bootstrap step: AWS must already have a GitHub OIDC Terraform role before GitHub Actions can assume it. Create that role once with an admin/bootstrap principal, set its ARN as `AWS_TERRAFORM_ROLE_ARN`, then let Terraform import or maintain it from this directory.
 
-Grant the Terraform execution principal:
+The Terraform role trust policy must allow the environment OIDC subjects, not just the branch subject:
 
-- `route53:CreateHostedZone`
-- `route53:ChangeTagsForResource`
-- `route53:ChangeResourceRecordSets` constrained to `heidisplaceframes.com`, `www.heidisplaceframes.com`, the ACM validation CNAME names, and the GoDaddy mail helper names
+- `repo:andywgarcia/heidis-place-modern:environment:terraform-plan`
+- `repo:andywgarcia/heidis-place-modern:environment:terraform-apply`
 
-After the grant, rerun:
+See `github-terraform-oidc-role.md` for the bootstrap policy shape.
+
+After bootstrap, run `Terraform Plan` and `Terraform Apply` from GitHub Actions. When apply completes, read the nameserver output from the workflow logs or a diagnostic Terraform output run:
 
 ```sh
-terraform -chdir=infra apply tfplan
 terraform -chdir=infra output production_route53_nameservers
 ```
