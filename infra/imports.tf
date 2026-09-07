@@ -67,6 +67,11 @@ import {
 }
 
 import {
+  to = aws_iam_role.github_terraform
+  id = "github-actions-terraform-heidis-place-andys-codex-com"
+}
+
+import {
   to = aws_iam_role_policy.github_actions
   id = "github-actions-heidis-place-andys-codex-com:deploy-spa"
 }
