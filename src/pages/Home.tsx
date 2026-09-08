@@ -276,15 +276,22 @@ export default function Home() {
             {renderGalleryItem(galleryImages[10], { sizes: '(max-width: 768px) 100vw, 50vw' })}
             {renderGalleryItem(galleryImages[11], { sizes: '(max-width: 768px) 100vw, 50vw' })}
           </div>
-          <div className="section-cta">
-            <p>Have something special to frame? We love a creative challenge.</p>
-            <a href="tel:2064911368" className="cta-button-inline">Let's Talk About Your Project →</a>
-          </div>
-          <div className="image-gallery-grid wide">
-            {renderGalleryItem(uniqueTouchFeatureImage, {
-              className: 'featured',
-              sizes: '(max-width: 768px) 100vw, 50vw',
-            })}
+          <div className="creative-challenge">
+            <div className="creative-challenge-copy">
+              <span className="section-label">Creative Challenge</span>
+              <h3>Have something special to frame?</h3>
+              <p>
+                Bring us the keepsake, odd shape, shadowbox idea, or view worth preserving.
+                We love finding a custom design that makes unusual pieces feel intentional.
+              </p>
+              <a href="tel:2064911368" className="cta-button-inline">Let's Talk About Your Project →</a>
+            </div>
+            <div className="creative-challenge-image">
+              {renderGalleryItem(uniqueTouchFeatureImage, {
+                className: 'challenge-gallery-item',
+                sizes: '(max-width: 768px) 100vw, 48vw',
+              })}
+            </div>
           </div>
         </AnimatedSection>
       </section>

@@ -423,6 +423,50 @@ button.gallery-item {
   gap: 16px;
 }
 
+/* Creative Challenge Feature */
+.creative-challenge {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 48px;
+  align-items: center;
+  margin-top: 56px;
+  padding-top: 44px;
+  border-top: 1px solid rgba(74, 14, 14, 0.1);
+}
+
+.creative-challenge-copy {
+  max-width: 470px;
+}
+
+.creative-challenge-copy h3 {
+  color: #1a1a1a;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.18;
+  margin: 0 0 18px 0;
+}
+
+.creative-challenge-copy p {
+  color: #666;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 0 0 18px 0;
+}
+
+.creative-challenge-image {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.creative-challenge-image .challenge-gallery-item {
+  aspect-ratio: 2 / 3;
+  border-radius: 18px;
+  max-width: 430px;
+}
+
 /* Testimonials */
 .testimonials-section {
   padding: 100px 40px;
@@ -848,6 +892,22 @@ a.contact-item:hover {
     grid-template-columns: 1fr;
     gap: 40px;
     direction: ltr;
+  }
+
+  .creative-challenge {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-top: 40px;
+    padding-top: 32px;
+  }
+
+  .creative-challenge-copy {
+    max-width: none;
+    text-align: center;
+  }
+
+  .creative-challenge-copy h3 {
+    font-size: 30px;
   }
 
   .about-content {
