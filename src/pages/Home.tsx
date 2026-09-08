@@ -155,7 +155,7 @@ export default function Home() {
               </svg>
             </div>
             <h3>Needlework Specialist</h3>
-            <p>Hand-stretched with stainless steel pins, never glue or sticky boards</p>
+            <p>Hand-stretched with stainless steel pins and laced</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon">
@@ -240,7 +240,7 @@ export default function Home() {
               <div className="split-highlights">
                 <div className="highlight-item">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
-                  <span>Hand-stretched with stainless steel pins</span>
+                  <span>Hand-stretched with stainless steel pins and laced</span>
                 </div>
                 <div className="highlight-item">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a0e0e" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
