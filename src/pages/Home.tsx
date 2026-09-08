@@ -284,7 +284,6 @@ export default function Home() {
             {renderGalleryItem(uniqueTouchFeatureImage, {
               className: 'featured',
               sizes: '(max-width: 768px) 100vw, 50vw',
-              imageStyle: { objectPosition: 'center 32%' },
             })}
           </div>
         </AnimatedSection>
@@ -330,7 +329,6 @@ export default function Home() {
             {renderGalleryItem(galleryImages[16], {
               sizes: '(max-width: 768px) 100vw, 50vw',
               style: { marginTop: '16px' },
-              imageStyle: { objectPosition: 'center 35%' },
             })}
           </div>
         </AnimatedSection>

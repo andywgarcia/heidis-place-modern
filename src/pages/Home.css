@@ -331,8 +331,8 @@ button.gallery-item {
 }
 
 .gallery-item img {
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
+  object-position: center;
   transition: transform 0.5s ease;
 }
 
@@ -342,11 +342,7 @@ button.gallery-item {
 }
 
 .gallery-item:hover img {
-  transform: scale(1.05);
-}
-
-.gallery-item.fit-contain:hover img {
-  transform: scale(1.02);
+  transform: none;
 }
 
 .studio-moments-section {
