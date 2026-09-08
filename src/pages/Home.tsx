@@ -207,18 +207,16 @@ export default function Home() {
           </div>
         </AnimatedSection>
         <AnimatedSection delay={150}>
-          <div className="image-gallery-grid">
+          <div className="image-gallery-grid balanced-five-gallery">
             {renderGalleryItem(galleryImages[0])}
             {renderGalleryItem(galleryImages[1])}
             {renderGalleryItem(galleryImages[2])}
+            {renderGalleryItem(galleryImages[3])}
+            {renderGalleryItem(galleryImages[4])}
           </div>
           <div className="section-cta">
             <p>Love what you see? Let us frame your favorite piece.</p>
             <a href="tel:2064911368" className="cta-button-inline">Call or text for an appointment →</a>
-          </div>
-          <div className="image-gallery-grid">
-            {renderGalleryItem(galleryImages[3])}
-            {renderGalleryItem(galleryImages[4])}
           </div>
         </AnimatedSection>
       </section>
@@ -229,7 +227,7 @@ export default function Home() {
           <div className="split-section reverse">
             <div className="split-images">
               {renderGalleryItem(galleryImages[5], { className: 'large', sizes: '(max-width: 768px) 100vw, 50vw' })}
-              <div className="split-images-row">
+              <div className="split-images-row needlework-thumbs">
                 {renderGalleryItem(galleryImages[6], { sizes: '(max-width: 768px) 50vw, 25vw' })}
                 {renderGalleryItem(galleryImages[7], { sizes: '(max-width: 768px) 50vw, 25vw' })}
                 {renderGalleryItem(galleryImages[8], { sizes: '(max-width: 768px) 50vw, 25vw' })}
@@ -261,7 +259,7 @@ export default function Home() {
         </AnimatedSection>
       </section>
 
-      {/* A Unique Touch — wide gallery layout */}
+      {/* A Unique Touch — balanced gallery layout */}
       <section className="gallery-section" id="a-unique-touch">
         <AnimatedSection>
           <div className="section-header">
@@ -271,8 +269,8 @@ export default function Home() {
           </div>
         </AnimatedSection>
         <AnimatedSection delay={150}>
-          <div className="image-gallery-grid wide">
-            {renderGalleryItem(galleryImages[9], { className: 'featured', sizes: '(max-width: 768px) 100vw, 50vw' })}
+          <div className="image-gallery-grid unique-touch-gallery">
+            {renderGalleryItem(galleryImages[9], { sizes: '(max-width: 768px) 100vw, 33vw' })}
             {renderGalleryItem(galleryImages[10], { sizes: '(max-width: 768px) 100vw, 50vw' })}
             {renderGalleryItem(galleryImages[11], { sizes: '(max-width: 768px) 100vw, 50vw' })}
           </div>
@@ -326,17 +324,12 @@ export default function Home() {
                 <a href="mailto:Heidis.frames@gmail.com" className="cta-button-inline">Ask About Our Materials →</a>
               </div>
             </div>
-            <div className="split-images">
+            <div className="split-images quality-image-grid">
               {renderGalleryItem(galleryImages[13], { className: 'large', sizes: '(max-width: 768px) 100vw, 50vw' })}
-              <div className="split-images-row">
-                {renderGalleryItem(galleryImages[14], { sizes: '(max-width: 768px) 50vw, 25vw' })}
-                {renderGalleryItem(galleryImages[15], { sizes: '(max-width: 768px) 50vw, 25vw' })}
-              </div>
+              {renderGalleryItem(galleryImages[14], { sizes: '(max-width: 768px) 50vw, 25vw' })}
+              {renderGalleryItem(galleryImages[15], { sizes: '(max-width: 768px) 50vw, 25vw' })}
+              {renderGalleryItem(galleryImages[16], { sizes: '(max-width: 768px) 50vw, 25vw' })}
             </div>
-            {renderGalleryItem(galleryImages[16], {
-              sizes: '(max-width: 768px) 100vw, 50vw',
-              style: { marginTop: '16px' },
-            })}
           </div>
         </AnimatedSection>
       </section>
