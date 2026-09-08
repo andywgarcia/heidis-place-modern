@@ -10,6 +10,7 @@ import {
   heidiShowcaseImages,
   heroImage,
   studioImage,
+  uniqueTouchFeatureImage,
   type SiteImage,
 } from '../data/images';
 
@@ -81,12 +82,12 @@ export default function Home() {
           <div className="hero-copy">
             <div className="hero-badge">Established 1993</div>
             <h1 className="hero-headline">
-              The framing you need to{' '}
-              <span className="highlight">elevate your art</span>
+              Elevate your picture <span className="hero-mobile-break">to a</span>{' '}
+              <span className="highlight">work of Art</span>
             </h1>
             <p className="hero-description">
               Heidi's Place evolves your artwork into a living, breathing masterpiece.
-              With over 20 years of experience and a Bachelor of Fine Arts degree,
+              With over 30 years of experience and a Bachelor of Fine Arts degree,
               we bring unsurpassed quality and design to transform your pictures into works of art.
             </p>
             <div className="hero-cta">
@@ -178,9 +179,8 @@ export default function Home() {
         <AnimatedSection delay={150}>
           <div className="image-gallery-grid studio-moments-grid">
             {heidiShowcaseImages.map((image, index) => renderGalleryItem(image, {
-              className: index === 0 || index === 3 ? 'large' : undefined,
+              className: index === 0 || index === 2 ? 'large' : undefined,
               sizes: '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw',
-              imageStyle: index >= 8 ? { objectPosition: 'center top' } : undefined,
             }))}
           </div>
         </AnimatedSection>
@@ -270,7 +270,11 @@ export default function Home() {
             <a href="tel:2064911368" className="cta-button-inline">Let's Talk About Your Project →</a>
           </div>
           <div className="image-gallery-grid wide">
-            {renderGalleryItem(galleryImages[12], { className: 'featured', sizes: '(max-width: 768px) 100vw, 50vw' })}
+            {renderGalleryItem(uniqueTouchFeatureImage, {
+              className: 'featured',
+              sizes: '(max-width: 768px) 100vw, 50vw',
+              imageStyle: { objectPosition: 'center 32%' },
+            })}
           </div>
         </AnimatedSection>
       </section>
@@ -446,7 +450,7 @@ export default function Home() {
         <div className="footer-content">
           <div className="footer-brand">
             <span className="footer-logo">Heidi's Place</span>
-            <span className="footer-tagline">Custom Picture Framing</span>
+            <span className="footer-tagline">Elevate your picture to a work of Art</span>
           </div>
           <div className="footer-info">
             <p>

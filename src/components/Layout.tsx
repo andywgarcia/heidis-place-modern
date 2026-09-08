@@ -62,12 +62,12 @@ export default function Layout() {
           {isHomePage ? (
             <button onClick={scrollToTop} className="logo-link">
               <span className="logo-text">Heidi's Place</span>
-              <span className="logo-tagline">Custom Picture Framing</span>
+              <span className="logo-tagline">Elevate your picture to a work of Art</span>
             </button>
           ) : (
             <Link to="/" className="logo-link">
               <span className="logo-text">Heidi's Place</span>
-              <span className="logo-tagline">Custom Picture Framing</span>
+              <span className="logo-tagline">Elevate your picture to a work of Art</span>
             </Link>
           )}
 
