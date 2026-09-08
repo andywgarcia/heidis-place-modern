@@ -2,6 +2,7 @@ export interface SiteImage {
   src: string;
   alt: string;
   width: number;
+  thumbnailFit?: 'cover' | 'contain';
 }
 
 const maxGeneratedWidth = 1600;
@@ -38,10 +39,10 @@ export const uniqueTouchFeatureImage: SiteImage = {
 
 export const heidiShowcaseImages: SiteImage[] = [
   { src: '/images/heidi-showcase-018.jpg', alt: 'Heidi working with custom framing materials in the studio', width: 2200 },
-  { src: '/images/heidi-showcase-104.jpg', alt: 'Framed angel needlework with layered blue and pink mats', width: 1536 },
-  { src: '/images/heidi-showcase-105.jpg', alt: 'Framed flamingo needlework with soft pink accent matting', width: 1536 },
-  { src: '/images/heidi-showcase-106.jpg', alt: 'Custom framed puffin illustration with dark mat and copper detail', width: 1238 },
-  { src: '/images/heidi-showcase-107.jpg', alt: 'Small framed moon and floral needlework with warm matting', width: 1536 },
+  { src: '/images/heidi-showcase-104.jpg', alt: 'Framed angel needlework with layered blue and pink mats', width: 1536, thumbnailFit: 'contain' },
+  { src: '/images/heidi-showcase-105.jpg', alt: 'Framed flamingo needlework with soft pink accent matting', width: 1536, thumbnailFit: 'contain' },
+  { src: '/images/heidi-showcase-106.jpg', alt: 'Custom framed puffin illustration with dark mat and copper detail', width: 1238, thumbnailFit: 'contain' },
+  { src: '/images/heidi-showcase-107.jpg', alt: 'Small framed moon and floral needlework with warm matting', width: 1536, thumbnailFit: 'contain' },
   { src: '/images/P1010084.jpg', alt: 'Beautifully framed art pieces displayed on a wall', width: 1598 },
   { src: '/images/P1010091.jpg', alt: 'Custom framed pictures with decorative accents', width: 1447 },
   { src: '/images/P1010090.jpg', alt: 'Elegant frame selection showcasing design expertise', width: 1815 },

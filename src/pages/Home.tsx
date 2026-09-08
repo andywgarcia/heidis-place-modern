@@ -14,6 +14,8 @@ import {
   type SiteImage,
 } from '../data/images';
 
+const googleReviewsUrl = "https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.1426321,-122.0641498,17z/data=!4m8!3m7!1s0x54900f572abb002b:0x4308b04eda5e424e!8m2!3d47.1426321!4d-122.0615695!9m1!1b1!16s%2Fg%2F113k9s1nr";
+
 export default function Home() {
   const currentYear = new Date().getFullYear();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -55,25 +57,34 @@ export default function Home() {
   const renderGalleryItem = (
     image: SiteImage,
     options: { className?: string; sizes?: string; style?: CSSProperties; imageStyle?: CSSProperties } = {},
-  ) => (
-    <button
-      type="button"
-      className={`gallery-item clickable ${options.className ?? ''}`.trim()}
-      onClick={() => openLightbox(image.src)}
-      aria-label={`Open image: ${image.alt}`}
-      style={options.style}
-    >
-      <ResponsiveImage
-        src={image.src}
-        alt={image.alt}
-        widths={generatedWidthsFor(image)}
-        sizes={options.sizes ?? '(max-width: 768px) 100vw, 33vw'}
-        loading="lazy"
-        decoding="async"
-        style={options.imageStyle}
-      />
-    </button>
-  );
+  ) => {
+    const classes = [
+      'gallery-item',
+      'clickable',
+      image.thumbnailFit === 'contain' ? 'fit-contain' : undefined,
+      options.className,
+    ].filter(Boolean).join(' ');
+
+    return (
+      <button
+        type="button"
+        className={classes}
+        onClick={() => openLightbox(image.src)}
+        aria-label={`Open image: ${image.alt}`}
+        style={options.style}
+      >
+        <ResponsiveImage
+          src={image.src}
+          alt={image.alt}
+          widths={generatedWidthsFor(image)}
+          sizes={options.sizes ?? '(max-width: 768px) 100vw, 33vw'}
+          loading="lazy"
+          decoding="async"
+          style={options.imageStyle}
+        />
+      </button>
+    );
+  };
 
   return (
     <div className="home-container">
@@ -340,7 +351,7 @@ export default function Home() {
               <p>"Heidi has been framing my counted cross-stitch pieces for over 25 years. No matter which state I live in, I always mail Heidi my work. The quality of artistry is amazing! It is evident she takes a lot of pride in each frame she creates. I will never trust anyone else to frame my work."</p>
               <div className="testimonial-author">
                 <strong>Cabin L.</strong>
-                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.1426321,-122.0641498,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
+                <span><a href={googleReviewsUrl} target="_blank" rel="noopener noreferrer" className="review-link">Google Reviews</a></span>
               </div>
             </div>
             <div className="testimonial-card">
@@ -348,7 +359,7 @@ export default function Home() {
               <p>"Heidi provides absolutely gorgeous and professional framing. She is kind, patient, and works with your vision and your budget to find the right materials for your project. The result was stunning and I will return!"</p>
               <div className="testimonial-author">
                 <strong>Anjanette V.</strong>
-                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.1426321,-122.0641498,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
+                <span><a href={googleReviewsUrl} target="_blank" rel="noopener noreferrer" className="review-link">Google Reviews</a></span>
               </div>
             </div>
             <div className="testimonial-card">
@@ -356,7 +367,7 @@ export default function Home() {
               <p>"Heidi invests her time and expertise in your artwork. It felt like she had all the time in the world to help make choices that would create a showpiece. We are thrilled! Completed before scheduled and price competitive!"</p>
               <div className="testimonial-author">
                 <strong>Clark H.</strong>
-                <span><a href="https://www.google.com/maps/place/Heidi's+Place+Custom+Framing/@47.1426321,-122.0641498,17z" target="_blank" rel="noopener noreferrer" className="review-link">Google Review</a></span>
+                <span><a href={googleReviewsUrl} target="_blank" rel="noopener noreferrer" className="review-link">Google Reviews</a></span>
               </div>
             </div>
           </div>
